@@ -1,0 +1,27 @@
+# Downloads and builds zlib
+#
+# Copyright 2022-2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+#
+
+GetDownloadSpec(DOWNLOAD_ZLIB ${ZLIB_GIT_URL} ${ZLIB_GIT_TAG})
+
+ExternalProject_Add(zlib
+  ${DOWNLOAD_ZLIB}
+
+  SOURCE_DIR
+    ${CMAKE_SOURCE_DIR}/zlib
+  CMAKE_ARGS
+    ${cmake_BUILD_TYPE}
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+    -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+    -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
+  INSTALL_COMMAND
+    ${SUDO_CMD} ${CMAKE_MAKE_PROGRAM} install
+    ${LDCONFIG_CMD}
+)
+
+if(ON_DEMAND)
+  set_target_properties(zlib PROPERTIES EXCLUDE_FROM_ALL TRUE)
+endif()
