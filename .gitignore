@@ -3,7 +3,10 @@ grpc.patch
 
 # build directories
 /build
+
+# install directories
 /host-deps
+/hostdeps
 /install
 
 # download directories
