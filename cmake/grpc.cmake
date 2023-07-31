@@ -23,6 +23,22 @@ endif()
 
 GetDownloadSpec(DOWNLOAD_GRPC ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
 
+if(OWN_PACKAGES)
+  set(own_packages
+    -DgRPC_ABSL_PROVIDER=package
+    -DgRPC_CARES_PROVIDER=package
+    -DgRPC_PROTOBUF_PROVIDER=package
+    -DgRPC_ZLIB_PROVIDER=package
+  )
+  set(own_dependencies
+    DEPENDS
+      abseil-cpp
+      cares
+      protobuf
+      zlib
+  )
+endif()
+
 ExternalProject_Add(grpc
   ${DOWNLOAD_GRPC}
   ${PATCH_GRPC}
@@ -39,13 +55,10 @@ ExternalProject_Add(grpc
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
     ${stratum_CMAKE_CXX_STANDARD}
     -DBUILD_SHARED_LIBS=on
-    -DgRPC_ABSL_PROVIDER=package
-    -DgRPC_CARES_PROVIDER=package
-    -DgRPC_PROTOBUF_PROVIDER=package
+    ${own_packages}
     # gRPC builds BoringSSL, which is incompatible with libpython.
     # We use whatever version of OpenSSL is installed instead.
     -DgRPC_SSL_PROVIDER=package
-    -DgRPC_ZLIB_PROVIDER=package
     -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=off
     -DgRPC_BUILD_GRPC_NODE_PLUGIN=off
     -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=off
@@ -57,11 +70,7 @@ ExternalProject_Add(grpc
   INSTALL_COMMAND
     ${SUDO_CMD} ${CMAKE_MAKE_PROGRAM} install
     ${LDCONFIG_CMD}
-  DEPENDS
-    abseil-cpp
-    cares
-    protobuf
-    zlib
+  ${own_dependencies}
 )
 
 if(ON_DEMAND)

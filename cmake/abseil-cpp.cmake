@@ -4,10 +4,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Recommended for CMake 3.8 and up
-# TODO(dfoster): who acts on this?
-set(ABSL_CXX_PROPAGATE_CXX_STD ON)
-
 GetDownloadSpec(DOWNLOAD_ABSL ${ABSEIL_GIT_URL} ${ABSEIL_GIT_TAG})
 
 ExternalProject_Add(abseil-cpp
@@ -25,6 +21,7 @@ ExternalProject_Add(abseil-cpp
     ${stratum_CMAKE_CXX_STANDARD}
     -DCMAKE_POSITION_INDEPENDENT_CODE=on
     -DCMAKE_INSTALL_RPATH=$ORIGIN
+    -DABSL_CXX_PROPAGATE_CXX_STD=on
     -DBUILD_SHARED_LIBS=on
     -DBUILD_TESTING=off
   INSTALL_COMMAND
