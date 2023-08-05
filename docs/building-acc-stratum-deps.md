@@ -36,7 +36,7 @@ There are several things to do before you can build the dependencies.
 
 - Install the ACC SDK
 
-  See [Installing the ACC SDK](../docs/guides/es2k/installing-acc-sdk.md)
+  See [Installing the ACC SDK](https://github.com/ipdk-io/networking-recipe/blob/main/docs/guides/es2k/installing-acc-sdk.md)
   for directions.
 
 ## 3. Getting the Source Code
