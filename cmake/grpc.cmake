@@ -10,11 +10,17 @@ unset(_package_overrides)
 unset(_patch_clause)
 
 if(PATCH_GRPC)
+  if(LATEST_GRPC)
+    set(_patchfile grpc2.patch)
+  else()
+    set(_patchfile grpc1.patch)
+  endif()
+
   # Patch the gRPC build script to set the RUNPATH of the installed
   # Protobuf compiler plugins to the relative paths of the library
   # directories.
   set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
-  configure_file(cmake/grpc.patch.in ${CMAKE_SOURCE_DIR}/grpc.patch @ONLY)
+  configure_file(cmake/${_patchfile}.in ${CMAKE_SOURCE_DIR}/grpc.patch @ONLY)
 
   set(_patch_clause
     PATCH_COMMAND
