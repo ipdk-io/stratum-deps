@@ -4,19 +4,21 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+unset(_source_subdir)
+
 GetDownloadSpec(DOWNLOAD_PROTOBUF ${PROTOBUF_GIT_URL} ${PROTOBUF_GIT_TAG})
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/protobuf)
-  set(_source_dir ${CMAKE_SOURCE_DIR}/protobuf)
-else()
-  set(_source_dir ${CMAKE_SOURCE_DIR})
+# In older versions of protobuf, the primary CMakeLists.txt file
+# is in the cmake subdirectory.
+if(NOT LATEST_GRPC)
+  set(_source_subdir SOURCE_SUBDIR cmake)
 endif()
 
 ExternalProject_Add(protobuf
   ${DOWNLOAD_PROTOBUF}
 
   SOURCE_DIR
-    ${_source_dir}
+    ${CMAKE_SOURCE_DIR}/protobuf
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
@@ -26,8 +28,7 @@ ExternalProject_Add(protobuf
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
     -DBUILD_SHARED_LIBS=on
     -Dprotobuf_BUILD_TESTS=off
-  SOURCE_SUBDIR
-    cmake
+  ${_source_subdir}
   INSTALL_COMMAND
     ${SUDO_CMD} ${CMAKE_MAKE_PROGRAM} install
     ${LDCONFIG_CMD}
