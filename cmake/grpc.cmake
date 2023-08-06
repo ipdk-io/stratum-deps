@@ -4,40 +4,45 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+unset(_build_codegen_option)
 unset(_depends_clause)
 unset(_download_clause)
-unset(_package_overrides)
+unset(_package_providers)
 unset(_patch_clause)
 
 if(PATCH_GRPC)
-  if(LATEST_GRPC)
-    set(_patchfile grpc2.patch)
+  cmake_print_variables(GRPC_VERSION)
+  if(GRPC_VERSION VERSION_EQUAL 1.54.2)
+    set(_patchfile grpc-v1.54.2.patch.in)
   else()
-    set(_patchfile grpc1.patch)
+    set(_patchfile grpc-v1.56.0.patch.in)
   endif()
 
   # Patch the gRPC build script to set the RUNPATH of the installed
   # Protobuf compiler plugins to the relative paths of the library
   # directories.
   set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
-  configure_file(cmake/${_patchfile}.in ${CMAKE_SOURCE_DIR}/grpc.patch @ONLY)
+  configure_file(
+    cmake/patches/${_patchfile}
+    ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch @ONLY
+  )
 
   set(_patch_clause
     PATCH_COMMAND
-      patch -i ${CMAKE_SOURCE_DIR}/grpc.patch -p1 ${FORCE_OPTION}
+      patch -i ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch -p1 ${FORCE_OPTION}
   )
 endif()
 
 if(CMAKE_CROSSCOMPILING)
   # If we're cross-compiling for the target system, don't build the
   # gRPC code generation executables.
-  set(gRPC_BUILD_CODEGEN_OPTION -DgRPC_BUILD_CODEGEN=off)
+  set(_build_codegen_option -DgRPC_BUILD_CODEGEN=off)
 endif()
 
 GetDownloadSpec(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
 
 if(OVERRIDE_GRPC)
-  set(_package_overrides
+  set(_package_providers
     -DgRPC_ABSL_PROVIDER=package
     -DgRPC_CARES_PROVIDER=package
     -DgRPC_PROTOBUF_PROVIDER=package
@@ -68,7 +73,7 @@ ExternalProject_Add(grpc
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
     ${stratum_CMAKE_CXX_STANDARD}
     -DBUILD_SHARED_LIBS=on
-    ${_package_overrides}
+    ${_package_providers}
     # gRPC builds BoringSSL, which is incompatible with libpython.
     # We use whatever version of OpenSSL is installed instead.
     -DgRPC_SSL_PROVIDER=package
@@ -79,7 +84,7 @@ ExternalProject_Add(grpc
     -DgRPC_BUILD_GRPC_RUBY_PLUGIN=off
     -DgRPC_BUILD_TESTS=off
     -DgRPC_INSTALL=on
-    ${gRPC_BUILD_CODEGEN_OPTION}
+    ${_build_codegen_option}
   INSTALL_COMMAND
     ${SUDO_CMD} ${CMAKE_MAKE_PROGRAM} install
     ${LDCONFIG_CMD}
