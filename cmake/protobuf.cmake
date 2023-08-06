@@ -10,7 +10,7 @@ GetDownloadSpec(DOWNLOAD_PROTOBUF ${PROTOBUF_GIT_URL} ${PROTOBUF_GIT_TAG})
 
 # In older versions of protobuf, the primary CMakeLists.txt file
 # is in the cmake subdirectory.
-if(NOT LATEST_GRPC)
+if(NOT RECENT_GRPC)
   set(_source_subdir SOURCE_SUBDIR cmake)
 endif()
 

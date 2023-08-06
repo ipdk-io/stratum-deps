@@ -29,10 +29,10 @@ cmake_print_variables(CMAKE_PROJECT_VERSION)
 
 option(DOWNLOAD     "Download repositories" TRUE)
 option(FORCE_PATCH  "Specify -f when patching" FALSE)
-option(LATEST_GRPC  "Use latest version of gRPC" FALSE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
-option(OVERRIDE_GRPC "Override gRPC packages with our own" TRUE)
+option(OVERRIDE_GRPC "Use own versions of gRPC subpackages" TRUE)
 option(PATCH_GRPC   "Patch gRPC after downloading" TRUE)
+option(RECENT_GRPC  "Use more recent version of gRPC" FALSE)
 option(USE_LDCONFIG "Use ldconfig when installing" FALSE)
 
 # Note: USE_SUDO should be DISABLED by default.

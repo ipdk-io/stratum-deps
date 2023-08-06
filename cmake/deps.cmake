@@ -10,7 +10,7 @@ set(GRPC_GIT_URL        https://github.com/google/grpc.git)
 set(PROTOBUF_GIT_URL    https://github.com/google/protobuf.git)
 set(ZLIB_GIT_URL        https://github.com/madler/zlib)
 
-if(LATEST_GRPC)
+if(RECENT_GRPC)
   set(ABSEIL_GIT_TAG    c2435f8342c2d0ed8101cb43adfd605fdc52dca2) # 20230125.3
   set(CARES_GIT_TAG     6360e96b5cf8e5980c887ce58ef727e53d77243a) # v1.19.1
   set(GRPC_GIT_TAG      6e85620c7e258df79666a4743f862f2f82701c2d) # v1.56.0
