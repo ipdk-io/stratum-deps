@@ -29,6 +29,7 @@ cmake_print_variables(CMAKE_PROJECT_VERSION)
 
 option(DOWNLOAD     "Download repositories" TRUE)
 option(FORCE_PATCH  "Specify -f when patching" FALSE)
+option(LATEST_GRPC  "Use latest version of gRPC" FALSE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
 option(OVERRIDE_GRPC "Override gRPC packages with our own" TRUE)
 option(PATCH_GRPC   "Patch gRPC after downloading" TRUE)
