@@ -15,9 +15,12 @@ grpc.patch
 /cctz
 /gflags
 /glog
-/gmock-gbl
 /grpc
 /gtest
 /json
 /protobuf
 /zlib
+
+# editor directories
+.vscode
+.vslick

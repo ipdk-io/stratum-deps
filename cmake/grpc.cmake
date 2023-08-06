@@ -4,16 +4,23 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Patch the gRPC build script to set the RUNPATH of the installed
-# Protobuf compiler plugins to the relative paths of the library
-# directories.
-set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
-configure_file(cmake/grpc.patch.in ${CMAKE_SOURCE_DIR}/grpc.patch @ONLY)
+unset(_depends_clause)
+unset(_download_clause)
+unset(_package_overrides)
+unset(_patch_clause)
 
-set(PATCH_GRPC
-  PATCH_COMMAND
-    patch -i ${CMAKE_SOURCE_DIR}/grpc.patch -p1 ${FORCE_OPTION}
-)
+if(PATCH_GRPC)
+  # Patch the gRPC build script to set the RUNPATH of the installed
+  # Protobuf compiler plugins to the relative paths of the library
+  # directories.
+  set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
+  configure_file(cmake/grpc.patch.in ${CMAKE_SOURCE_DIR}/grpc.patch @ONLY)
+
+  set(_patch_clause
+    PATCH_COMMAND
+      patch -i ${CMAKE_SOURCE_DIR}/grpc.patch -p1 ${FORCE_OPTION}
+  )
+endif()
 
 if(CMAKE_CROSSCOMPILING)
   # If we're cross-compiling for the target system, don't build the
@@ -21,16 +28,16 @@ if(CMAKE_CROSSCOMPILING)
   set(gRPC_BUILD_CODEGEN_OPTION -DgRPC_BUILD_CODEGEN=off)
 endif()
 
-GetDownloadSpec(DOWNLOAD_GRPC ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
+GetDownloadSpec(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
 
-if(OWN_PACKAGES)
-  set(own_packages
+if(OVERRIDE_GRPC)
+  set(_package_overrides
     -DgRPC_ABSL_PROVIDER=package
     -DgRPC_CARES_PROVIDER=package
     -DgRPC_PROTOBUF_PROVIDER=package
     -DgRPC_ZLIB_PROVIDER=package
   )
-  set(own_dependencies
+  set(_depends_clause
     DEPENDS
       abseil-cpp
       cares
@@ -40,8 +47,8 @@ if(OWN_PACKAGES)
 endif()
 
 ExternalProject_Add(grpc
-  ${DOWNLOAD_GRPC}
-  ${PATCH_GRPC}
+  ${_download_clause}
+  ${_patch_clause}
 
   SOURCE_DIR
     ${CMAKE_SOURCE_DIR}/grpc
@@ -55,7 +62,7 @@ ExternalProject_Add(grpc
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
     ${stratum_CMAKE_CXX_STANDARD}
     -DBUILD_SHARED_LIBS=on
-    ${own_packages}
+    ${_package_overrides}
     # gRPC builds BoringSSL, which is incompatible with libpython.
     # We use whatever version of OpenSSL is installed instead.
     -DgRPC_SSL_PROVIDER=package
@@ -70,7 +77,7 @@ ExternalProject_Add(grpc
   INSTALL_COMMAND
     ${SUDO_CMD} ${CMAKE_MAKE_PROGRAM} install
     ${LDCONFIG_CMD}
-  ${own_dependencies}
+  ${_depends_clause}
 )
 
 if(ON_DEMAND)

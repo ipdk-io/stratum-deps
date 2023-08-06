@@ -30,7 +30,8 @@ cmake_print_variables(CMAKE_PROJECT_VERSION)
 option(DOWNLOAD     "Download repositories" TRUE)
 option(FORCE_PATCH  "Specify -f when patching" FALSE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
-option(OWN_PACKAGES "Override gRPC packages with our own" TRUE)
+option(OVERRIDE_GRPC "Override gRPC packages with our own" TRUE)
+option(PATCH_GRPC   "Patch gRPC after downloading" TRUE)
 option(USE_LDCONFIG "Use ldconfig when installing" FALSE)
 
 # Note: USE_SUDO should be DISABLED by default.
@@ -117,12 +118,13 @@ endfunction(GetDownloadSpec)
 # Define git repository tags and urls.
 include(cmake/deps.cmake)
 
-if(OWN_PACKAGES)
+if(OVERRIDE_GRPC)
   include(cmake/abseil-cpp.cmake)
   include(cmake/zlib.cmake)
   include(cmake/c-ares.cmake)
   include(cmake/protobuf.cmake)
 endif()
+
 include(cmake/grpc.cmake)
 
 include(cmake/cctz.cmake)

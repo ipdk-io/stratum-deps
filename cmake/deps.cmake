@@ -20,13 +20,17 @@ set(GLOG_GIT_URL https://github.com/google/glog.git)
 set(GLOG_GIT_TAG a8e0007e96ff96145022c488e367da10f835c75d) # v0.6.0-rc1
 
 set(GRPC_GIT_URL https://github.com/google/grpc.git)
-set(GRPC_GIT_TAG 8871dab19b4ab5389e28474d25cfeea61283265c) # v1.54.2
+if(NOT DEFINED GRPC_GIT_TAG)
+  set(GRPC_GIT_TAG 8871dab19b4ab5389e28474d25cfeea61283265c) # v1.54.2
+endif()
 
 set(GTEST_GIT_URL https://github.com/google/googletest.git)
 set(GTEST_GIT_TAG release-1.11.0)
 
 set(JSON_GIT_URL https://github.com/nlohmann/json.git)
-set(JSON_GIT_TAG 760304635dc74a5bf77903ad92446a6febb85acf) # tags/v3.10.5^2~8
+if(NOT DEFINED JSON_GIT_TAG)
+  set(JSON_GIT_TAG 760304635dc74a5bf77903ad92446a6febb85acf) # tags/v3.10.5^2~8
+endif()
 
 set(PROTOBUF_GIT_URL https://github.com/google/protobuf.git)
 set(PROTOBUF_GIT_TAG fe271ab76f2ad2b2b28c10443865d2af21e27e0e) # v3.20.3
