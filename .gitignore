@@ -10,14 +10,8 @@ grpc.patch
 /install
 
 # download directories
-/abseil-cpp
-/c-ares
-/cctz
-/gflags
-/glog
-/gmock-gbl
-/grpc
-/gtest
-/json
-/protobuf
-/zlib
+source
+
+# editor directories
+.vscode
+.vslick

@@ -4,31 +4,65 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Patch the gRPC build script to set the RUNPATH of the installed
-# Protobuf compiler plugins to the relative paths of the library
-# directories.
-set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
-configure_file(cmake/grpc.patch.in ${CMAKE_SOURCE_DIR}/grpc.patch @ONLY)
+unset(_build_codegen_option)
+unset(_depends_clause)
+unset(_download_clause)
+unset(_package_providers)
+unset(_patch_clause)
 
-set(PATCH_GRPC
-  PATCH_COMMAND
-    patch -i ${CMAKE_SOURCE_DIR}/grpc.patch -p1 ${FORCE_OPTION}
-)
+if(PATCH_GRPC)
+  cmake_print_variables(GRPC_VERSION)
+  if(GRPC_VERSION VERSION_EQUAL 1.54.2)
+    set(_patchfile grpc-v1.54.2.patch.in)
+  else()
+    set(_patchfile grpc-v1.56.0.patch.in)
+  endif()
+
+  # Patch the gRPC build script to set the RUNPATH of the installed
+  # Protobuf compiler plugins to the relative paths of the library
+  # directories.
+  set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
+  configure_file(
+    cmake/patches/${_patchfile}
+    ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch @ONLY
+  )
+
+  set(_patch_clause
+    PATCH_COMMAND
+      patch -i ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch -p1 ${FORCE_OPTION}
+  )
+endif()
 
 if(CMAKE_CROSSCOMPILING)
   # If we're cross-compiling for the target system, don't build the
   # gRPC code generation executables.
-  set(gRPC_BUILD_CODEGEN_OPTION -DgRPC_BUILD_CODEGEN=off)
+  set(_build_codegen_option -DgRPC_BUILD_CODEGEN=off)
 endif()
 
-GetDownloadSpec(DOWNLOAD_GRPC ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
+GetDownloadSpec(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
+
+if(OVERRIDE_PKGS)
+  set(_package_providers
+    -DgRPC_ABSL_PROVIDER=package
+    -DgRPC_CARES_PROVIDER=package
+    -DgRPC_PROTOBUF_PROVIDER=package
+    -DgRPC_ZLIB_PROVIDER=package
+  )
+  set(_depends_clause
+    DEPENDS
+      abseil-cpp
+      cares
+      protobuf
+      zlib
+  )
+endif()
 
 ExternalProject_Add(grpc
-  ${DOWNLOAD_GRPC}
-  ${PATCH_GRPC}
+  ${_download_clause}
+  ${_patch_clause}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/grpc
+    ${DEPS_SOURCE_DIR}/grpc
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
@@ -39,13 +73,10 @@ ExternalProject_Add(grpc
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
     ${stratum_CMAKE_CXX_STANDARD}
     -DBUILD_SHARED_LIBS=on
-    -DgRPC_ABSL_PROVIDER=package
-    -DgRPC_CARES_PROVIDER=package
-    -DgRPC_PROTOBUF_PROVIDER=package
+    ${_package_providers}
     # gRPC builds BoringSSL, which is incompatible with libpython.
     # We use whatever version of OpenSSL is installed instead.
     -DgRPC_SSL_PROVIDER=package
-    -DgRPC_ZLIB_PROVIDER=package
     -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=off
     -DgRPC_BUILD_GRPC_NODE_PLUGIN=off
     -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=off
@@ -53,15 +84,11 @@ ExternalProject_Add(grpc
     -DgRPC_BUILD_GRPC_RUBY_PLUGIN=off
     -DgRPC_BUILD_TESTS=off
     -DgRPC_INSTALL=on
-    ${gRPC_BUILD_CODEGEN_OPTION}
+    ${_build_codegen_option}
   INSTALL_COMMAND
     ${SUDO_CMD} ${CMAKE_MAKE_PROGRAM} install
     ${LDCONFIG_CMD}
-  DEPENDS
-    abseil-cpp
-    cares
-    protobuf
-    zlib
+  ${_depends_clause}
 )
 
 if(ON_DEMAND)

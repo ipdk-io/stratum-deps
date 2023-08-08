@@ -10,7 +10,7 @@ ExternalProject_Add(cctz
   ${DOWNLOAD_CCTZ}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/cctz
+    ${DEPS_SOURCE_DIR}/cctz
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

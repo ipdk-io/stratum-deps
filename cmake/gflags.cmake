@@ -10,7 +10,7 @@ ExternalProject_Add(gflags
   ${DOWNLOAD_GFLAGS}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/gflags
+    ${DEPS_SOURCE_DIR}/gflags
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

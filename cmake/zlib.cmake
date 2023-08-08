@@ -10,7 +10,7 @@ ExternalProject_Add(zlib
   ${DOWNLOAD_ZLIB}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/zlib
+    ${DEPS_SOURCE_DIR}/zlib
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

@@ -13,14 +13,6 @@ include(ExternalProject)
 include(CMakePrintHelpers)
 include(GNUInstallDirs)
 
-# Define git repository tags and urls.
-include(cmake/deps.cmake)
-
-# Define default CXX standard.
-if(NOT CMAKE_CROSSCOMPILING)
-  include(cmake/cxx_standard.cmake)
-endif()
-
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.24 AND
     ${CMAKE_VERSION} VERSION_LESS 3.26)
   message(STATUS "CMake version is ${CMAKE_VERSION}")
@@ -38,6 +30,9 @@ cmake_print_variables(CMAKE_PROJECT_VERSION)
 option(DOWNLOAD     "Download repositories" TRUE)
 option(FORCE_PATCH  "Specify -f when patching" FALSE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
+option(OVERRIDE_PKGS "Use own versions of subpackages" TRUE)
+option(PATCH_GRPC   "Patch gRPC after downloading" TRUE)
+option(RECENT_GRPC  "Use more recent version of gRPC" FALSE)
 option(USE_LDCONFIG "Use ldconfig when installing" FALSE)
 
 # Note: USE_SUDO should be DISABLED by default.
@@ -49,12 +44,20 @@ option(USE_SUDO     "Use sudo when installing" FALSE)
 if(USE_SUDO)
   set(SUDO_CMD "sudo" "-E")
   if(USE_LDCONFIG)
-      set(LDCONFIG_CMD COMMAND sudo ldconfig)
+    set(LDCONFIG_CMD COMMAND sudo ldconfig)
   endif()
 endif()
 
 if(FORCE_PATCH)
   set(FORCE_OPTION "-f")
+endif()
+
+if(NOT DOWNLOAD)
+  message(STATUS "Source will not be downloaded")
+endif()
+
+if(NOT PATCH_GRPC)
+  message(STATUS "gRPC will not be patched")
 endif()
 
 #-----------------------------------------------------------------------
@@ -71,7 +74,7 @@ else()
 endif()
 
 if(NOT CMAKE_BUILD_TYPE STREQUAL "")
-    set(cmake_BUILD_TYPE "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+  set(cmake_BUILD_TYPE "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
 endif()
 
 cmake_print_variables(CMAKE_BUILD_TYPE)
@@ -83,6 +86,10 @@ cmake_print_variables(CMAKE_FIND_ROOT_PATH)
 #-----------------------------------------------------------------------
 # CMAKE_CXX_STANDARD
 #-----------------------------------------------------------------------
+
+if(NOT CMAKE_CROSSCOMPILING)
+  include(cmake/cxx_standard.cmake)
+endif()
 
 if(CXX_STANDARD)
   set(_CXX_CURRENT_STANDARD ${CXX_STANDARD})
@@ -117,11 +124,20 @@ endfunction(GetDownloadSpec)
 # Dependencies
 #-----------------------------------------------------------------------
 
-include(cmake/abseil-cpp.cmake)
-include(cmake/zlib.cmake)
-include(cmake/c-ares.cmake)
-include(cmake/protobuf.cmake)
+# Define git repository tags and urls.
+include(cmake/deps.cmake)
+
+set(DEPS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/source)
+
+if(OVERRIDE_PKGS)
+  include(cmake/abseil-cpp.cmake)
+  include(cmake/zlib.cmake)
+  include(cmake/c-ares.cmake)
+  include(cmake/protobuf.cmake)
+endif()
+
 include(cmake/grpc.cmake)
+
 include(cmake/cctz.cmake)
 include(cmake/gflags.cmake)
 include(cmake/glog.cmake)
