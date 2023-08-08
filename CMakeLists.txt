@@ -56,7 +56,7 @@ if(NOT DOWNLOAD)
   message(STATUS "Source will not be downloaded")
 endif()
 
-if(NOT GRPC_PATCH)
+if(NOT PATCH_GRPC)
   message(STATUS "gRPC will not be patched")
 endif()
 
