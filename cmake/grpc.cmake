@@ -41,7 +41,7 @@ endif()
 
 GetDownloadSpec(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
 
-if(OVERRIDE_GRPC)
+if(OVERRIDE_PKGS)
   set(_package_providers
     -DgRPC_ABSL_PROVIDER=package
     -DgRPC_CARES_PROVIDER=package

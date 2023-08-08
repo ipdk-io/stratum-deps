@@ -27,12 +27,14 @@ ExternalProject_Add(protobuf
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
     -DBUILD_SHARED_LIBS=on
+    -Dprotobuf_ABSL_PROVIDER=package
     -Dprotobuf_BUILD_TESTS=off
   ${_source_subdir}
   INSTALL_COMMAND
     ${SUDO_CMD} ${CMAKE_MAKE_PROGRAM} install
     ${LDCONFIG_CMD}
   DEPENDS
+    abseil-cpp
     zlib
 )
 

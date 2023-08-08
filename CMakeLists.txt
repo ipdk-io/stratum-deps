@@ -30,7 +30,7 @@ cmake_print_variables(CMAKE_PROJECT_VERSION)
 option(DOWNLOAD     "Download repositories" TRUE)
 option(FORCE_PATCH  "Specify -f when patching" FALSE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
-option(OVERRIDE_GRPC "Use own versions of gRPC subpackages" TRUE)
+option(OVERRIDE_PKGS "Use own versions of subpackages" TRUE)
 option(PATCH_GRPC   "Patch gRPC after downloading" TRUE)
 option(RECENT_GRPC  "Use more recent version of gRPC" FALSE)
 option(USE_LDCONFIG "Use ldconfig when installing" FALSE)
@@ -50,6 +50,14 @@ endif()
 
 if(FORCE_PATCH)
   set(FORCE_OPTION "-f")
+endif()
+
+if(NOT DOWNLOAD)
+  message(STATUS "Source will not be downloaded")
+endif()
+
+if(NOT GRPC_PATCH)
+  message(STATUS "gRPC will not be patched")
 endif()
 
 #-----------------------------------------------------------------------
@@ -119,7 +127,7 @@ endfunction(GetDownloadSpec)
 # Define git repository tags and urls.
 include(cmake/deps.cmake)
 
-if(OVERRIDE_GRPC)
+if(OVERRIDE_PKGS)
   include(cmake/abseil-cpp.cmake)
   include(cmake/zlib.cmake)
   include(cmake/c-ares.cmake)

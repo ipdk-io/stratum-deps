@@ -16,5 +16,9 @@ rm -fr grpc/third_party/cares
 rm -fr grpc/third_party/protobuf
 rm -fr grpc/third_party/zlib
 
+rm -fr protobuf/third_party/abseil-cpp
+rm -fr protobuf/third_party/zlib
+
 # unused packages
+rm -fr grpc/bloaty
 rm -fr grpc/third_party/boringssl-with-bazel
