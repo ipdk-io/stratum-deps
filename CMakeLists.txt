@@ -28,10 +28,10 @@ cmake_print_variables(CMAKE_PROJECT_VERSION)
 #-----------------------------------------------------------------------
 
 option(DOWNLOAD     "Download repositories" TRUE)
-option(FORCE_PATCH  "Specify -f when patching" FALSE)
+option(FORCE_PATCH  "Specify -f when patching (deprecated)" FALSE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
 option(OVERRIDE_PKGS "Use own versions of subpackages" TRUE)
-option(PATCH_GRPC   "Patch gRPC after downloading" TRUE)
+option(PATCH        "Patch source after downloading" TRUE)
 option(RECENT_GRPC  "Use more recent version of gRPC" FALSE)
 option(USE_LDCONFIG "Use ldconfig when installing" FALSE)
 
@@ -56,8 +56,8 @@ if(NOT DOWNLOAD)
   message(STATUS "Source will not be downloaded")
 endif()
 
-if(NOT PATCH_GRPC)
-  message(STATUS "gRPC will not be patched")
+if(NOT PATCH)
+  message(STATUS "Source will not be patched")
 endif()
 
 #-----------------------------------------------------------------------
