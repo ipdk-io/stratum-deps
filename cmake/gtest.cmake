@@ -10,7 +10,7 @@ ExternalProject_Add(gtest
   ${DOWNLOAD_GTEST}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/gtest
+    ${DEPS_SOURCE_DIR}/gtest
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

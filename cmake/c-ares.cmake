@@ -10,7 +10,7 @@ ExternalProject_Add(cares
   ${DOWNLOAD_CARES}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/c-ares
+    ${DEPS_SOURCE_DIR}/c-ares
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

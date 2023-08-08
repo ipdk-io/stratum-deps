@@ -62,7 +62,7 @@ ExternalProject_Add(grpc
   ${_patch_clause}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/grpc
+    ${DEPS_SOURCE_DIR}/grpc
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

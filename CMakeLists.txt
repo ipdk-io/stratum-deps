@@ -127,6 +127,8 @@ endfunction(GetDownloadSpec)
 # Define git repository tags and urls.
 include(cmake/deps.cmake)
 
+set(DEPS_SOURCE_DIR ${CMAKE_SOURCE_DIR}/source)
+
 if(OVERRIDE_PKGS)
   include(cmake/abseil-cpp.cmake)
   include(cmake/zlib.cmake)

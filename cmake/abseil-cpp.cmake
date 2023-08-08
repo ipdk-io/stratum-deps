@@ -10,7 +10,7 @@ ExternalProject_Add(abseil-cpp
   ${DOWNLOAD_ABSL}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/abseil-cpp
+    ${DEPS_SOURCE_DIR}/abseil-cpp
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

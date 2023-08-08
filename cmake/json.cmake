@@ -10,7 +10,7 @@ ExternalProject_Add(json
   ${DOWNLOAD_JSON}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/json
+    ${DEPS_SOURCE_DIR}/json
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}

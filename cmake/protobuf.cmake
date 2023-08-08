@@ -18,7 +18,7 @@ ExternalProject_Add(protobuf
   ${DOWNLOAD_PROTOBUF}
 
   SOURCE_DIR
-    ${CMAKE_SOURCE_DIR}/protobuf
+    ${DEPS_SOURCE_DIR}/protobuf
   CMAKE_ARGS
     ${cmake_BUILD_TYPE}
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
