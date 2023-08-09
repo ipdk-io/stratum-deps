@@ -59,7 +59,8 @@ The CMake build script supports the following configuration options.
 | ------ | ---- | ----------- |
 | `CMAKE_INSTALL_PREFIX` | Path | Directory in which the dependencies should be installed. |
 | `CXX_STANDARD` | Number | C++ standard (11, 14, 17, etc.) the compiler should apply. (Default: not specified) |
-| `DOWNLOAD` | Boolean | Whether to download the source repositories. (Default: TRUE)
+| `DOWNLOAD` | Boolean | Whether to download the source repositories. (Default: TRUE) |
+| `FORCE_PATCH` | Boolean | Whether to specify the force (`-f`) option when patching a downloaded repository. (deprecated) |
 | `ON_DEMAND` | Boolean | Whether to build only the specified target(s). If this option is FALSE, all targets will be built. (Default: FALSE) |
 | `PATCH` | Boolean | Whether to patch the source after downloading it. Should be FALSE if building source that was previously downloaded. (Default: TRUE)
 | `USE_LDCONFIG` | Boolean | Whether to use `ldconfig` to update the loader cache[1] after installing a module. Only valid if `USE_SUDO` is enabled. (Default: FALSE) |
