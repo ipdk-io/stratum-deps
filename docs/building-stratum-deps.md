@@ -1,26 +1,25 @@
-# Building the Stratum Dependencies
+# Building Stratum dependencies
 
 Stratum is the component of `infrap4d` that implements the P4Runtime and gNMI
-(OpenConfig) services. It requires that a number of third-party libraries
-be installed on the development system.
+(OpenConfig) services. It requires  a number of third-party libraries, which
+this package provides.
 
 This document explains how to build and install the Stratum dependencies.
 
 > **Note**: For the Intel&reg; IPU E2100, see
-[Building Stratum Dependencies for the ES2K ACC](building-acc-stratum-deps.md).
+[Building Stratum dependencies for the ACC](building-acc-stratum-deps.md).
 
 ## Prerequisites
 
-In order to build the Stratum dependencies:
+Before you build the dependencies, you need to:
 
-* CMake 3.15 or above must be installed.
+- Install CMake 3.15 or above
 
-  Avoid versions 3.24 and 3.25. There is an issue in cmake that causes the
-  Protobuf build to fail. This problem was fixed in version 3.26.
+  Avoid versions 3.24 and 3.25. They cause the dependencies build to fail.
 
-* OpenSSL 1.1 must be installed.
+- Install OpenSSL 1.1
 
-  P4 Control Plane uses OpenSSL instead of BoringSSL.
+  Note that P4 Control Plane is not compatible with BoringSSL.
 
 ## Source code
 
@@ -33,23 +32,26 @@ git clone https://github.com/ipdk-io/stratum-deps.git
 The CMake script will download the source code for the libraries as the
 first step in the build.
 
+The source code for the dependencies is not part of the distribution.
+It is downloaded by the build script.
+
 ## Install location
 
-You will need to decide where on your system you would like to install the
-dependencies. This location (the "install prefix") must be specified when you
-configure the build.
+You will need to decide where to install the dependencies. This location
+(the "install prefix") must be specified when you configure the build.
 
-It is recommended that you _not_ install the dependency libraries in `/usr` or
-`/usr/local`. It is easier to upgrade or rebuild if packages that are
-updated on different cadences are kept separate from one another.
+It is recommended that you _not_ install the dependency libraries in `/usr`
+or `/usr/local`. The packages will be easier to update if they are separated
+from other libraries.
 
-The `CMAKE_INSTALL_PREFIX` option is used to specify the directory in which
-the dependencies should be installed.
+The `CMAKE_INSTALL_PREFIX` option specifies the directory in which the
+dependencies should be installed.
 
-If you plan to install the dependency libraries in a system directory, you will
-need to log in as `root` or run from an account that has `sudo` privilege.
+If you _do_ decide to install the dependencies in a system directory, you
+will need to log in as `root` or do the build in an account that has `sudo`
+privilege.
 
-## 5 Build options
+## Build options
 
 The CMake build script supports the following configuration options.
 
