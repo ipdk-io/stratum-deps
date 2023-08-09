@@ -73,8 +73,16 @@ else()
   list(APPEND CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX})
 endif()
 
+#-----------------------------------------------------------------------
+# Configuration variables
+#-----------------------------------------------------------------------
+
 if(NOT CMAKE_BUILD_TYPE STREQUAL "")
   set(cmake_BUILD_TYPE "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+endif()
+
+if(DEFINED CMAKE_TOOLCHAIN_FILE AND NOT CMAKE_TOOLCHAIN_FILE STREQUAL "")
+  set(cmake_TOOLCHAIN_FILE "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}")
 endif()
 
 cmake_print_variables(CMAKE_BUILD_TYPE)
