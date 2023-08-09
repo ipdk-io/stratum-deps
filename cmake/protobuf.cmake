@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+unset(_build_shared_libs)
 unset(_source_subdir)
 
 GetDownloadSpec(DOWNLOAD_PROTOBUF ${PROTOBUF_GIT_URL} ${PROTOBUF_GIT_TAG})
@@ -12,6 +13,14 @@ GetDownloadSpec(DOWNLOAD_PROTOBUF ${PROTOBUF_GIT_URL} ${PROTOBUF_GIT_TAG})
 # is in the cmake subdirectory.
 if(NOT RECENT_GRPC)
   set(_source_subdir SOURCE_SUBDIR cmake)
+endif()
+
+# Protobuf v23.x generates unresolved external references to
+# ThreadSafeArena::ThreadCache _thread_cache if BUILD_SHARED_LIBS=ON.
+if(RECENT_GRPC)
+  set(_build_shared_libs off)
+else()
+  set(_build_shared_libs on)
 endif()
 
 ExternalProject_Add(protobuf
@@ -26,7 +35,7 @@ ExternalProject_Add(protobuf
     -DCMAKE_POSITION_INDEPENDENT_CODE=on
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
-    -DBUILD_SHARED_LIBS=on
+    -DBUILD_SHARED_LIBS=${_build_shared_libs}
     -Dprotobuf_ABSL_PROVIDER=package
     -Dprotobuf_BUILD_TESTS=off
   ${_source_subdir}
