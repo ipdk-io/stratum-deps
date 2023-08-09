@@ -10,7 +10,7 @@ unset(_download_clause)
 unset(_package_providers)
 unset(_patch_clause)
 
-if(PATCH_GRPC)
+if(PATCH)
   cmake_print_variables(GRPC_VERSION)
   if(GRPC_VERSION VERSION_EQUAL 1.54.2)
     set(_patchfile grpc-v1.54.2.patch.in)

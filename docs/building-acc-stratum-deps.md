@@ -1,12 +1,12 @@
-# Building Stratum Dependencies for the ES2K ACC
+# Building Stratum dependencies for the ACC
 
 This document explains how to build the Stratum dependencies for the
 ARM Compute Complex (ACC) of the Intel&reg; IPU E2100.
 
 > **Note**: To build the dependencies for a different target, see
-[Building the Stratum Dependencies](building-stratum-deps.md).
+[Building Stratum dependencies](building-stratum-deps.md).
 
-## 1. Introduction
+## Introduction
 
 Stratum is the component of P4 Control Plane that implements the P4Runtime
 and gNMI (OpenConfig) services. It requires a number of third-party
@@ -22,9 +22,9 @@ You will need to build two versions of the libraries:
 
 The Host and Target libraries must be the same version.
 
-## 2. Preparing the System
+## Prerequisites
 
-There are several things to do before you can build the dependencies.
+Before you build the dependencies, you need to:
 
 - Install CMake 3.15 or above
 
@@ -36,40 +36,34 @@ There are several things to do before you can build the dependencies.
 
 - Install the ACC SDK
 
-  See [Installing the ACC SDK](https://github.com/ipdk-io/networking-recipe/blob/main/docs/guides/es2k/installing-acc-sdk.md)
+  See [Installing the ACC SDK](https://ipdk.io/p4cp-userguide/guides/es2k/installing-acc-sdk)
   for directions.
 
-## 3. Getting the Source Code
+## Source code
 
-The script to build the Stratum dependencies is in the IPDK networking-recipe
-repository.
-
-To clone the repository:
+Clone this repository to your development system:
 
 ```bash
-git clone --recursive https://github.com/ipdk-io/networking-recipe.git ipdk.recipe
+git clone https://github.com/ipdk-io/stratum-deps.git
 ```
 
-You may omit the `--recursive` option if you are only interested in building
-the dependencies.
+The CMake script will download the source code for the libraries as the
+first step in the build.
 
-You may substitute your own local directory name for `ipdk.recipe`.
+## Host dependencies
 
-The build script for the Stratum dependencies is in the `setup` directory.
+### Host install location
 
-The source code for the dependencies is not part of the distribution.
-It is downloaded by the build script.
-
-## 4. Building the Host Dependencies
-
-First, decide where to install the Host dependencies. This location (the
+Pick an install location for the Host dependencies. This location (the
 "install prefix") must be specified when you configure the build.
 
 It is recommended that you *not* install the Host dependencies in `/usr` or
 `/usr/local`. It will be easier to rebuild or update the dependencies if
 their libraries are not mingled with other libraries.
 
-The `setup` directory includes a helper script (`make-host-deps.sh`) that
+### Host build script
+
+The `scripts` subdirectory includes a helper script (`make-host-deps.sh`) that
 can be used to build the Host dependencies.
 
 - The `--help` (`-h`) option lists the parameters the helper script supports
@@ -81,9 +75,11 @@ The script normally does a minimal build, containing just the components
 needed for cross-compilation. Specify the `--full` parameter if you want
 to build all the libraries.
 
-> **Note:** The Host and Target build environments are mutually incompatible.
-  You must ensure that the [target build environment variables](#5-defining-the-target-build-environment)
-  are undefined before you build the Host dependencies.
+### Host build environment
+
+The Host and Target build environments are mutually incompatible.
+ You must ensure that the  [ACC build environment](defining-acc-environment.md)
+ is undefined when you build the Host dependencies.
 
 ### User build
 
@@ -109,82 +105,19 @@ or build from an account that has `sudo` privilege.
 
 PREFIX might be something like `/opt/ipdk/x86deps`.
 
-The script only uses `sudo` when installing libraries. Omit the parameter
-if you are running as `root`.
+The script only uses `sudo` when installing libraries.
+Omit the `--sudo` parameter if you are running as `root`.
 
-## 5. Defining the Target Build Environment
+## Target dependencies
 
-In order to cross-compile for the ACC, you will need to define a number
-of environment variables. This is typically done by putting the bash
-commands in a file (e.g. `es2k-setup.env`) and using the `source` command
-to execute it. We recommend removing execute permission from the file
-(`chmod a-x setup.env`) to remind yourself to source it, not run it.
+### Target install location
 
-For example:
-
-```bash
-# Set by user. Used internally.
-ACC_SDK=<acc-sdk-directory>
-P4CPBASE=<recipe-directory>
-
-# Used internally.
-AARCH64=$ACC_SDK/aarch64-intel-linux-gnu
-SYSROOT=$AARCH64/aarch64-intel-linux-gnu/sysroot
-
-# Used externally for build.
-export SDKTARGETSYSROOT=$SYSROOT
-export PKG_CONFIG_SYSROOT_DIR=$SYSROOT
-export PKG_CONFIG_PATH=$SYSROOT/usr/lib64/pkgconfig:$SYSROOT/usr/lib/pkgconfig:$SYSROOT/usr/share/pkgconfig
-export CMAKE_TOOLCHAIN_FILE=$P4CPBASE/cmake/aarch64-toolchain.cmake
-[ -z "$ES2K_SAVE_PATH" ] && export ES2K_SAVE_PATH=$PATH
-export PATH=$AARCH64/bin:$ES2K_SAVE_PATH
-```
-
-In the listing above, you will need to provide values for these variables:
-
-- `ACC_SDK` - install path of the ACC-RL SDK (for example,
-  `$HOME/p4cp-dev/acc_sdk`)
-- `P4CPBASE` - path to the local networking-recipe directory (for example,
-  `$HOME/p4cp-dev/ipdk.recipe`)
-
-From these paths, the setup script derives:
-
-- `AARCH64` - path to the directory containing the AArch64
-  cross-compiler suite
-- `SYSROOT` - path to the sysroot directory, which contains AArch64
-  header files and binaries
-
-These directories are part of the ACC SDK.
-
-The setup script exports the following variables, which are used by CMake
-and the helper script:
-
-- `SDKTARGETSYSROOT` - path to the sysroot directory
-- `CMAKE_TOOLCHAIN_FILE` - path to the CMake toolchain file
-- `PKG_CONFIG_PATH` - search path for `pkg-config` to use when looking for
-  packages on the target system
-- `PKG_CONFIG_SYSROOT_DIR` - path to the sysroot directory, for use by
-  `pkg-config`
-
-The setup script also adds the directory containing the cross-compiler
-executables to the system `PATH`.
-
-> **Note:** The ACC-RL SDK includes its own setup file
-> (`environment-setup-aarch64-intel-linux-gnu`). We strongly recommend
-> that you *not* use this file when building the Stratum dependencies
-> or P4 Control Plane.
->
-> The SDK setup file is intended for use with GNU Autotools. Some of
-> the environment variables it defines affect the behavior of the C and
-> C++ compilers and the linker. These definitions may interfere with the
-> CMake build in non-obvious ways.
-
-## 6. Building the Target Dependencies
-
-You will need to pick an install location for the target dependencies.
+Pick an install location for the Target dependencies.
 This will typically be under the sysroot directory structure. For
 example, the `opt` subdirectory will become the root-level `/opt`
 directory when the file structure is copied to the E2100 file system.
+
+### Target build script
 
 The `setup` directory includes a helper script (`make-cross-deps.sh`) that
 can be used to build the Target dependencies.
@@ -197,12 +130,18 @@ can be used to build the Target dependencies.
 You will need to provide the helper script with the path to the Host
 dependencies (`--host`) as well as the install prefix (`--prefix`).
 
+### Target build environment
+
+See [Defining the ACC Build Environment](defining-acc-environment.md)
+for instructions on creating an `acc-setup.env` file to define the environment
+variables needed for cross-compilation.
+
 ### Target build
 
-Source the file that the defines the [target build environment variables](#5-defining-the-target-build-environment).
+Source the file that the defines the ACC build environment.
 
 ```bash
-source es2k-setup.env
+source acc-setup.env
 ```
 
 Remove the `build` directory from the previous build.
@@ -211,7 +150,7 @@ Remove the `build` directory from the previous build.
 rm -fr build
 ```
 
-Now run the build script:
+Run the build script.
 
 ```bash
 ./make-cross-deps.sh --host=HOSTDEPS --prefix=PREFIX
