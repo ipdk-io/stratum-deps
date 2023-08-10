@@ -26,14 +26,13 @@ from `networking-recipe/setup` to a standlone repository.
 
 ### Package selection
 
-- Implement OVERRIDE_PKGS option to control whether we build our own
-  versions of third-party packages bundled with gRPC and Protobuf.
-  (Default: ON)
+- Google bundles a number of third-party packages with gRPC and Protobuf.
+  Implement an OVERRIDE_PKGS option (default: ON) to specify whether we
+  replace several of these packages with our own versions.
 
 ### Patch stage
 
-- Implement PATCH option to allow the patch step to be disabled.
-  (Default: OFF)
+- Implement PATCH option (default: ON) to allow the patch step to be disabled.
 
 - Deprecate the FORCE_PATCH option.
 
@@ -53,6 +52,9 @@ from `networking-recipe/setup` to a standlone repository.
   projects unless it is defined in the superproject.
 
 ## Individual packages
+
+Most of these changes were made in anticipation of upgrading to a more
+recent versions of the package.
 
 ### Abseil
 
@@ -78,5 +80,5 @@ from `networking-recipe/setup` to a standlone repository.
 - Protobuf now bundles a version of Abseil. Modify build to override this.
 
 - When we build Protobuf v23.x with BUILD_SHARED_LIBS=ON, we get
-  undefined external references to `thread_cache_``. Work around
+  undefined external references to `thread_cache_`. Work around
   this problem by building Protobuf in static library mode.
