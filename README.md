@@ -14,6 +14,7 @@ The repository is functional, but it is still a work in progress.
 
 - [Building the Stratum Dependencies](/docs/building-stratum-deps.md)
 - [Building the Stratum Dependencies for ACC](/docs/building-acc-stratum-deps.md)
+- [Defining the ACC Build Environment](docs/defining-acc-environment.md)]
 
 ## Other documents
 
