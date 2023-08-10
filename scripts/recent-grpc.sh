@@ -4,4 +4,4 @@
 cmake -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=recent-deps \
-  -DRECENT_GRPC=YES
+  -DRECENT_PKGS=YES
