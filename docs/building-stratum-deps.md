@@ -131,6 +131,15 @@ cmake --build build -j6
 The libraries will be built and installed in `./hostdeps` without downloading
 or patching the source code.
 
+### Build using Ninja
+
+To build the Stratum dependencies using Ninja instead of GNU Make:
+
+```bash
+cmake -B build -G Ninja -DCMAKE_INSTALL_PREFIX=deps
+cmake --build build -j6
+```
+
 ### On-demand build
 
 To build and install just gRPC and its dependencies:
