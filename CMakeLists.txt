@@ -60,6 +60,12 @@ if(NOT PATCH)
   message(STATUS "Source will not be patched")
 endif()
 
+if(DEFINED CMAKE_SHARED_LIBRARY_RPATH_ORIGIN_TOKEN)
+  set(RPATH_TOKEN ${CMAKE_SHARED_LIBRARY_RPATH_ORIGIN_TOKEN})
+else()
+  set(RPATH_TOKEN "$ORIGIN")
+endif()
+
 #-----------------------------------------------------------------------
 # Search paths
 #-----------------------------------------------------------------------

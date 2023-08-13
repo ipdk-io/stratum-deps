@@ -21,7 +21,7 @@ if(PATCH)
   # Patch the gRPC build script to set the RUNPATH of the installed
   # Protobuf compiler plugins to the relative paths of the library
   # directories.
-  set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
+  set(GRPC_INSTALL_RPATH ${ORIGIN_TOKEN}/../lib64:${ORIGIN_TOKEN}/../lib)
   configure_file(
     cmake/patches/${_patchfile}
     ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch @ONLY
@@ -67,7 +67,7 @@ ExternalProject_Add(grpc
     ${cmake_BUILD_TYPE}
     ${cmake_TOOLCHAIN_FILE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-    -DCMAKE_INSTALL_RPATH=$ORIGIN
+    -DCMAKE_INSTALL_RPATH=${ORIGIN_TOKEN}
     -DCMAKE_POSITION_INDEPENDENT_CODE=on
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
