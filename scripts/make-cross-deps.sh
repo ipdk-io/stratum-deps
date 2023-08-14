@@ -27,8 +27,9 @@ _SYSROOT=${SDKTARGETSYSROOT}
 ##################
 
 _BLD_DIR=build
+_CFG_ONLY=false
 _DRY_RUN=false
-_JOBS=8
+_NJOBS=8
 _PREFIX=//opt/deps
 _TOOLFILE=${CMAKE_TOOLCHAIN_FILE}
 
@@ -40,17 +41,20 @@ print_help() {
     echo ""
     echo "Build target dependency libraries"
     echo ""
-    echo "Options:"
+    echo "Paths:"
     echo "  --build=DIR      -B  Build directory path [${_BLD_DIR}]"
-    echo "  --cxx=VERSION        CXX_STANDARD to build dependencies (Default: empty)"
-    echo "  --dry-run        -n  Display cmake parameters and exit"
-    echo "  --force          -f  Specify -f when patching (Default: false)"
     echo "  --host=DIR       -H  Host dependencies directory [${_HOST_DIR}]"
-    echo "  --jobs=NJOBS     -j  Number of build threads (Default: ${_JOBS})"
-    echo "  --no-download        Do not download repositories (Default: false)"
     echo "  --prefix=DIR*    -P  Install directory prefix [${_PREFIX}]"
-    echo "  --sudo               Use sudo when installing (Default: false)"
     echo "  --toolchain=FILE -T  CMake toolchain file"
+    echo ""
+    echo "Options:"
+    echo "  --config             Only perform configuration step"
+    echo "  --cxx=VERSION        CXX_STANDARD to specify [${CXX_STD}]"
+    echo "  --dry-run        -n  Display cmake parameters and exit"
+    echo "  --force          -f  Specify -f when patching"
+    echo "  --jobs=NJOBS     -j  Number of build threads [${_NJOBS}]"
+    echo "  --no-download        Do not download repositories"
+    echo "  --sudo               Use sudo when installing"
     echo ""
     echo "* '//' at the beginning of the directory path will be replaced"
     echo "  with the sysroot directory path."
@@ -62,14 +66,35 @@ print_help() {
 }
 
 ######################
+# print_cmake_params #
+######################
+
+print_cmake_params() {
+    echo ""
+    [ -n "${_GENERATOR}" ] && echo "${_GENERATOR}"
+    echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
+    echo "CMAKE_TOOLCHAIN_FILE=${_TOOLFILE}"
+    echo "JOBS=${_NJOBS}"
+    [ -n "${_CXX_STANDARD_OPTION}" ] && echo "${_CXX_STANDARD_OPTION:2}"
+    [ -n "${_DOWNLOAD}" ] && echo "${_DOWNLOAD:2}"
+    [ -n "${_HOST_DEPEND_DIR}" ] && echo "${_HOST_DEPEND_DIR:2}"
+    [ -n "${_FORCE_PATCH}" ] && echo "${_FORCE_PATCH:2}"
+    [ -n "${_USE_SUDO}" ] && echo "${_USE_SUDO:2}"
+    echo ""
+}
+
+######################
 # Parse command line #
 ######################
 
-SHORTOPTS=B:H:P:T:fhj:n
-LONGOPTS=build:,cxx:,hostdeps:,jobs:,prefix:,toolchain:
-LONGOPTS=${LONGOPTS},dry-run,force,help,no-download,sudo
+SHORTOPTS=B:H:P:T:j:
+SHORTOPTS=${SHORTOPTS}hn
 
-eval set -- `getopt -o ${SHORTOPTS} --long ${LONGOPTS} -- "$@"`
+LONGOPTS=build:,cxx:,hostdeps:,jobs:,prefix:,toolchain:
+LONGOPTS=${LONGOPTS},config,dry-run,force,help,ninja,no-download,sudo
+
+GETOPTS=$(getopt -o ${SHORTOPTS} --long ${LONGOPTS} -- "$@")
+eval set -- "${GETOPTS}"
 
 while true ; do
     case "$1" in
@@ -87,24 +112,30 @@ while true ; do
         _TOOLFILE=$2
         shift 2 ;;
     # Options
+    --config)
+        _CFG_ONLY=true
+        shift ;;
     --cxx)
         _CXX_STANDARD_OPTION="-DCXX_STANDARD=$2"
         shift 2 ;;
+    --dry-run|-n)
+        _DRY_RUN=true
+        shift ;;
     -f|--force)
         _FORCE_PATCH="-DFORCE_PATCH=TRUE"
-        shift 1 ;;
+        shift ;;
     -h|--help)
         print_help
         exit 99 ;;
     -j|--jobs)
-        _JOBS=$2
+        _NJOBS=$2
         shift 2 ;;
-    -n|--dry-run)
-        _DRY_RUN=true
-        shift 1 ;;
+    --ninja)
+        _GENERATOR="-G Ninja"
+        shift ;;
     --no-download)
         _DOWNLOAD="-DDOWNLOAD=FALSE"
-        shift 1 ;;
+        shift ;;
     --sudo)
         _USE_SUDO="-DUSE_SUDO=TRUE"
         shift ;;
@@ -128,17 +159,9 @@ if [ -n "${_HOST_DIR}" ]; then
     _HOST_DEPEND_DIR="-DHOST_DEPEND_DIR=${_HOST_DIR}"
 fi
 
+# Show parameters if this is a dry run
 if [ "${_DRY_RUN}" = "true" ]; then
-    echo ""
-    echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
-    echo "CMAKE_TOOLCHAIN_FILE=${_TOOLFILE}"
-    echo "JOBS=${_JOBS}"
-    [ -n "${_CXX_STANDARD_OPTION}" ] && echo "${_CXX_STANDARD_OPTION:2}"
-    [ -n "${_DOWNLOAD}" ] && echo "${_DOWNLOAD:2}"
-    [ -n "${_HOST_DEPEND_DIR}" ] && echo "${_HOST_DEPEND_DIR:2}"
-    [ -n "${_FORCE_PATCH}" ] && echo "${_FORCE_PATCH:2}"
-    [ -n "${_USE_SUDO}" ] && echo "${_USE_SUDO:2}"
-    echo ""
+    print_cmake_params
     exit 0
 fi
 
@@ -149,10 +172,13 @@ fi
 rm -fr ${_BLD_DIR}
 
 cmake -S . -B ${_BLD_DIR} \
+    "${_GENERATOR}" \
     -DCMAKE_INSTALL_PREFIX=${_PREFIX} \
     -DCMAKE_TOOLCHAIN_FILE=${_TOOLFILE} \
     ${_HOST_DEPEND_DIR} \
     ${_CXX_STANDARD_OPTION} \
     ${_DOWNLOAD} ${_FORCE_PATCH} ${_USE_SUDO}
 
-cmake --build ${_BLD_DIR} -j${_JOBS}
+if [ "${_CFG_ONLY}" = "false" ]; then
+    cmake --build ${_BLD_DIR} -j${_NJOBS}
+fi
