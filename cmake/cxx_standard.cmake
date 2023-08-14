@@ -49,6 +49,8 @@ function(get_cplusplus_standard CXX_STANDARD)
       set(cxx_standard 14)
     elseif(cplusplus EQUAL 201703)
       set(cxx_standard 17)
+    else()
+      message(WARNING "_cplusplus value (${cplusplus}) not recognized")
     endif()
   endif()
 
