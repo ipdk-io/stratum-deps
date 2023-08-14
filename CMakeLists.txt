@@ -92,14 +92,16 @@ cmake_print_variables(CMAKE_PREFIX_PATH)
 cmake_print_variables(CMAKE_FIND_ROOT_PATH)
 
 #-----------------------------------------------------------------------
-# CMAKE_CXX_STANDARD
+# CXX_STANDARD
 #-----------------------------------------------------------------------
 
 if(CXX_STANDARD)
   set(CURRENT_CXX_STANDARD ${CXX_STANDARD})
+elseif(CMAKE_CXX_STANDARD)
+  set(CURRENT_CXX_STANDARD ${CMAKE_CXX_STANDARD})
 elseif(NOT CMAKE_CROSSCOMPILING)
   include(cmake/cxx_standard.cmake)
-  get_default_cxx_standard(CURRENT_CXX_STANDARD)
+  get_cplusplus_standard(CURRENT_CXX_STANDARD)
 endif()
 
 if(DEFINED CURRENT_CXX_STANDARD AND NOT CURRENT_CXX_STANDARD STREQUAL "")

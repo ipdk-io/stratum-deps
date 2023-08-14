@@ -3,7 +3,7 @@
 # Copyright 2023 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-function(get_default_cxx_standard CXX_STANDARD)
+function(get_cplusplus_standard CXX_STANDARD)
 
   function(get_cplusplus CPLUSPLUS)
 
@@ -40,9 +40,7 @@ function(get_default_cxx_standard CXX_STANDARD)
 
   get_cplusplus(cplusplus)
 
-  if(DEFINED CMAKE_CXX_STANDARD)
-    set(cxx_standard ${CMAKE_CXX_STANDARD})
-  elseif(DEFINED cplusplus)
+  if(DEFINED cplusplus)
     # see https://en.cppreference.com/w/cpp/preprocessor/replace#Predefined_macros
     # for constants
     if(cplusplus EQUAL 201103)
