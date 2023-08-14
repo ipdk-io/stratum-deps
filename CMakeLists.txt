@@ -95,17 +95,16 @@ cmake_print_variables(CMAKE_FIND_ROOT_PATH)
 # CMAKE_CXX_STANDARD
 #-----------------------------------------------------------------------
 
-if(NOT CMAKE_CROSSCOMPILING)
-  include(cmake/cxx_standard.cmake)
-endif()
-
 if(CXX_STANDARD)
-  set(_CXX_CURRENT_STANDARD ${CXX_STANDARD})
+  set(CURRENT_CXX_STANDARD ${CXX_STANDARD})
+elseif(NOT CMAKE_CROSSCOMPILING)
+  include(cmake/cxx_standard.cmake)
+  get_default_cxx_standard(CURRENT_CXX_STANDARD)
 endif()
 
-if(DEFINED _CXX_CURRENT_STANDARD)
-  set(stratum_ABSL_CXX_STANDARD -DABSL_CXX_STANDARD=${_CXX_CURRENT_STANDARD})
-  set(stratum_CMAKE_CXX_STANDARD -DCMAKE_CXX_STANDARD=${_CXX_CURRENT_STANDARD})
+if(DEFINED CURRENT_CXX_STANDARD AND NOT CURRENT_CXX_STANDARD STREQUAL "")
+  set(absl_CXX_STANDARD -DABSL_CXX_STANDARD=${CURRENT_CXX_STANDARD})
+  set(cmake_CXX_STANDARD -DCMAKE_CXX_STANDARD=${CURRENT_CXX_STANDARD})
 endif()
 
 #-----------------------------------------------------------------------
