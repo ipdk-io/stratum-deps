@@ -71,7 +71,7 @@ ExternalProject_Add(grpc
     -DCMAKE_POSITION_INDEPENDENT_CODE=on
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
-    ${stratum_CMAKE_CXX_STANDARD}
+    ${cmake_CXX_STANDARD}
     -DBUILD_SHARED_LIBS=on
     ${_package_providers}
     # gRPC builds BoringSSL, which is incompatible with libpython.
