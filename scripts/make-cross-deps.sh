@@ -30,6 +30,7 @@ _SYSROOT=${SDKTARGETSYSROOT}
 # Default values #
 ##################
 
+_BLD_TYPE="Release"
 _BLD_DIR=build
 _CFG_ONLY=0
 _DRY_RUN=0
@@ -52,6 +53,9 @@ print_help() {
     echo "  --prefix=DIR*    -P  Install directory prefix [${_PREFIX}]"
     echo "  --toolchain=FILE -T  CMake toolchain file"
     echo ""
+    echo "* '//' at the beginning of the directory path will be replaced"
+    echo "  with the sysroot directory path."
+    echo ""
     echo "Options:"
     echo "  --config             Configure without building"
     echo "  --cxx=STD            C++ standard to be used [${_CXX_STD}]"
@@ -62,13 +66,16 @@ print_help() {
     echo "  --no-patch           Do not patch source after downloading"
     echo "  --sudo               Use sudo when installing"
     echo ""
-    echo "* '//' at the beginning of the directory path will be replaced"
-    echo "  with the sysroot directory path."
+    echo "Configurations:"
+    echo "  --debug              Debug configuration"
+    echo "  --minsize            MinSizeRel configuration"
+    echo "  --reldeb             RelWithDebInfo configuration"
+    echo "  --release            Release configuration (default)"
     echo ""
     echo "Environment variables:"
-    echo "  CMAKE_TOOLCHAIN_FILE - CMake toolchain file"
-    echo "  HOST_INSTALL - host system dependencies"
-    echo "  SDKTARGETSYSROOT - sysroot directory"
+    echo "  CMAKE_TOOLCHAIN_FILE - Default toolchain file"
+    echo "  HOST_INSTALL - Default host dependencies directory"
+    echo "  SDKTARGETSYSROOT - Sysroot directory"
     echo ""
 }
 
@@ -79,11 +86,12 @@ print_help() {
 print_cmake_params() {
     echo ""
     [ -n "${_GENERATOR}" ] && echo "${_GENERATOR}"
+    echo "CMAKE_BUILD_TYPE=${_BLD_TYPE}"
     echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
     echo "CMAKE_TOOLCHAIN_FILE=${_TOOLFILE}"
     [ -n "${_CXX_STD}" ] && echo "CXX_STANDARD=${_CXX_STD}"
-    [ -n "${_DOWNLOAD}" ] && echo "${_DOWNLOAD:2}"
     [ -n "${_HOST_DEPEND_DIR}" ] && echo "${_HOST_DEPEND_DIR:2}"
+    [ -n "${_DOWNLOAD}" ] && echo "${_DOWNLOAD:2}"
     [ -n "${_PATCH}" ] && echo "${_PATCH:2}"
     [ -n "${_FORCE_PATCH}" ] && echo "${_FORCE_PATCH:2}"
     [ -n "${_USE_SUDO}" ] && echo "${_USE_SUDO:2}"
@@ -96,6 +104,25 @@ print_cmake_params() {
     echo "-j${_NJOBS}"
 }
 
+################
+# config_build #
+################
+
+config_build() {
+    # shellcheck disable=SC2086
+    cmake -S . -B "${_BLD_DIR}" \
+        ${_GENERATOR} \
+        -DCMAKE_BUILD_TYPE="${_BLD_TYPE}" \
+        -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
+        -DCMAKE_TOOLCHAIN_FILE="${_TOOLFILE}" \
+        ${_CXX_STANDARD} \
+        ${_HOST_DEPEND_DIR} \
+        ${_DOWNLOAD} \
+        ${_PATCH} \
+        ${_FORCE_PATCH} \
+        ${_USE_SUDO}
+}
+
 ######################
 # Parse command line #
 ######################
@@ -103,7 +130,9 @@ print_cmake_params() {
 SHORTOPTS=B:H:P:T:j:
 SHORTOPTS=${SHORTOPTS}hn
 
-LONGOPTS=build:,cxx-std:,hostdeps:,jobs:,prefix:,toolchain:
+LONGOPTS=build:,hostdeps:,prefix:,toolchain:
+LONGOPTS=${LONGOPTS},cxx-std:,jobs:
+LONGOPTS=${LONGOPTS},debug,release,minsize,reldeb
 LONGOPTS=${LONGOPTS},config,dry-run,force,help,ninja
 LONGOPTS=${LONGOPTS},no-download,no-patch,sudo
 
@@ -125,6 +154,19 @@ while true ; do
     --toolchain|-T)
         _TOOLFILE=$2
         shift 2 ;;
+    # Configurations
+    --debug)
+        _BLD_TYPE="Debug"
+        shift ;;
+    --minsize)
+        _BLD_TYPE="MinSizeRel"
+        shift ;;
+    --reldeb)
+        _BLD_TYPE="RelWithDebInfo"
+        shift ;;
+    --release)
+        _BLD_TYPE="Release"
+        shift ;;
     # Options
     --config)
         _CFG_ONLY=1
@@ -188,17 +230,7 @@ fi
 
 rm -fr "${_BLD_DIR}"
 
-# shellcheck disable=SC2086
-cmake -S . -B "${_BLD_DIR}" \
-    ${_GENERATOR} \
-    -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
-    -DCMAKE_TOOLCHAIN_FILE="${_TOOLFILE}" \
-    ${_CXX_STANDARD} \
-    ${_HOST_DEPEND_DIR} \
-    ${_DOWNLOAD} \
-    ${_PATCH} \
-    ${_FORCE_PATCH} \
-    ${_USE_SUDO}
+config_build
 
 if [ ${_CFG_ONLY} -ne 0 ]; then
     # shellcheck disable=SC2086

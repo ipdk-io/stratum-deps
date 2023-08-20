@@ -38,12 +38,13 @@ fi
 # Default values #
 ##################
 
+_BLD_TYPE="Release"
 _BLD_DIR=build
 _CFG_ONLY=0
 _DRY_RUN=0
 _NJOBS=8
 _PREFIX=hostdeps
-_SCOPE=minimal
+_SCOPE=full
 
 ##############
 # print_help #
@@ -64,10 +65,16 @@ print_help() {
     echo "  --force         -f  Specify -f when patching (deprecated)"
     echo "  --full              Build all dependency libraries [${_SCOPE}]"
     echo "  --jobs=NJOBS    -j  Number of build threads [${_NJOBS}]"
-    echo "  --minimal           Build required dependencies only [${_SCOPE}]"
+    echo "  --minimal           Build only required dependencies [${_SCOPE}]"
     echo "  --no-download       Do not download repositories"
     echo "  --no-patch          Do not patch source after downloading"
     echo "  --sudo              Use sudo when installing"
+    echo ""
+    echo "Configurations:"
+    echo "  --debug             Debug configuration"
+    echo "  --minsize           MinSizeRel configuration"
+    echo "  --reldeb            RelWithDebInfo configuration"
+    echo "  --release           Release configuration (default)"
     echo ""
 }
 
@@ -78,6 +85,7 @@ print_help() {
 print_cmake_params() {
     echo ""
     [ -n "${_GENERATOR}" ] && echo "${_GENERATOR}"
+    echo "CMAKE_BUILD_TYPE=${_BLD_TYPE}"
     echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
     [ -n "${_CXX_STD}" ] && echo "CXX_STANDARD=${_CXX_STD}"
     [ -n "${_ON_DEMAND}" ] && echo "${_ON_DEMAND:2}"
@@ -97,6 +105,23 @@ print_cmake_params() {
     echo "Will perform a ${_SCOPE} build"
 }
 
+################
+# config_build #
+################
+
+config_build() {
+    # shellcheck disable=SC2086
+    cmake -S . -B "${_BLD_DIR}" \
+        ${_GENERATOR} \
+        -DCMAKE_BUILD_TYPE="${_BLD_TYPE}" \
+        -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
+        ${_CXX_STANDARD} \
+        ${_ON_DEMAND} \
+        ${_DOWNLOAD} \
+        ${_PATCH} \
+        ${_FORCE_PATCH} \
+        ${_USE_SUDO}
+}
 ######################
 # Parse command line #
 ######################
@@ -105,6 +130,7 @@ SHORTOPTS=B:P:j:
 SHORTOPTS=${SHORTOPTS}fhn
 
 LONGOPTS=build:,cxx-std:,jobs:,prefix:
+LONGOPTS=${LONGOPTS},debug,release,minsize,reldeb
 LONGOPTS=${LONGOPTS},config,dry-run,force,full,help,minimal,ninja
 LONGOPTS=${LONGOPTS},no-download,no-patch,sudo
 
@@ -120,6 +146,19 @@ while true ; do
     --prefix|-P)
         _PREFIX=$2
         shift 2 ;;
+    # Configurations
+    --debug)
+        _BLD_TYPE="Debug"
+        shift ;;
+    --minsize)
+        _BLD_TYPE="MinSizeRel"
+        shift ;;
+    --reldeb)
+        _BLD_TYPE="RelWithDebInfo"
+        shift ;;
+    --release)
+        _BLD_TYPE="Release"
+        shift ;;
     # Options
     --config)
         _CFG_ONLY=1
@@ -190,16 +229,7 @@ fi
 
 rm -fr "${_BLD_DIR}" "${_PREFIX}"
 
-# shellcheck disable=SC2086
-cmake -S . -B "${_BLD_DIR}" \
-    ${_GENERATOR} \
-    -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
-    ${_CXX_STANDARD} \
-    ${_ON_DEMAND} \
-    ${_DOWNLOAD} \
-    ${_PATCH} \
-    ${_FORCE_PATCH} \
-    ${_USE_SUDO}
+config_build
 
 if [ ${_CFG_ONLY} -ne 0 ]; then
     # shellcheck disable=SC2086
