@@ -33,6 +33,15 @@ Variables
 Command-line parameters
 -----------------------
 
+Help
+~~~~
+
+``--dry-run``, ``-n``
+  Displays the parameters that will be passed to CMake, and exits.
+
+``--help``, ``-h``
+  Displays usage information and exits.
+
 Paths
 ~~~~~
 
@@ -73,9 +82,6 @@ Options
 ``cxx=STD``
   C++ standard to be used by the compiler (11, 14, 17).
   Specifies the value of the ``CXX_STANDARD`` listfile variable.
-
-``--dry-run``, ``-n``
-  Displays the parameters that will be passed to CMake, and exits.
   
 ``--force``, ``-f``
   Requests that the ``-f`` (force) option be used when patching a
@@ -83,9 +89,6 @@ Options
   Specifies the value of the ``FORCE_PATCH`` listfile variable.
   Deprecated. If the repositories have already been patched, the
   ``--no-patch`` option bypasses the patch stage entirely.
-
-``--help``, ``-h``
-  Displays usage information and exits.
 
 ``--jobs=NJOBS``, ``-j NJOBS``
   Number of build threads.
