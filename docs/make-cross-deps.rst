@@ -30,16 +30,41 @@ Variables
 
 * A *listfile variable* is defined by the CMakeLists.txt file.
 
-Options
--------
+Command-line parameters
+-----------------------
+
+Paths
+~~~~~
 
 ``--build=BLDDIR``, ``-B BLDDIR``
   Directory that CMake will use to perform the build.
   Will be created if it does not exist.
   Specifies the value of the ``-B`` CMake option.
-  Can be used to create separate build directories for the host and
+  Can be used to create separate build directories for host and
   target dependencies.
   Defaults to ``build``.
+
+``--host=HOST``, ``-H HOST``
+  Directory in which the native (nost system) dependencies were installed.
+  Used to run the Protobuf compiler during the build.
+  Specifies the value of the ``HOST_DEPEND_DIR`` listfile variable.
+  Defaults to the value of the ``HOST_INSTALL`` environment variable.
+
+``--prefix=PREFIX``, ``-P PREFIX``
+  Directory in which the target dependencies will be installed.
+  Will be created if it does not exist.
+  Specifies the value of the ``CMAKE_INSTALL_PREFIX`` variable.
+  ``//`` at the beginning of the path is a shortcut. The script will
+  make the path relative to the sysroot directory.
+
+``--toolchain=FILE``, ``-T FILE``
+  CMake toolchain file.
+  Must be specified when cross-compiling.
+  Specifies the value of the ``CMAKE_TOOLCHAIN_FILE`` variable.
+  Defaults to the value of the ``CMAKE_TOOLCHAIN_FILE`` environment variable.
+
+Options
+~~~~~~~
 
 ``--config``
   Configures CMake but does not build the dependencies.
@@ -62,12 +87,6 @@ Options
 ``--help``, ``-h``
   Displays usage information and exits.
 
-``--host=HOST``, ``-H HOST``
-  Directory in which the native (nost system) dependencies were installed.
-  Used to run the Protobuf compiler during the build.
-  Specifies the value of the ``HOST_DEPEND_DIR`` listfile variable.
-  Defaults to the value of the ``HOST_INSTALL`` environment variable.
-
 ``--jobs=NJOBS``, ``-j NJOBS``
   Number of build threads.
   Specifies the value of the ``-j`` CMake option.
@@ -84,22 +103,9 @@ Options
   Do not patch repositories after downloading them.
   The ``PATCH`` listfile variable will be set to FALSE.
 
-``--prefix=PREFIX``, ``-P PREFIX``
-  Directory in which the target dependencies will be installed.
-  Will be created if it does not exist.
-  Specifies the value of the ``CMAKE_INSTALL_PREFIX`` variable.
-  ``//`` at the beginning of the path is a shortcut. The script will
-  make the path relative to the sysroot directory.
-
 ``--sudo``
   Requests that ``sudo`` be used when installing the dependencies.
   The ``USE_SUDO`` listfile variable will be set to TRUE.
-
-``--toolchain=FILE``, ``-T FILE``
-  CMake toolchain file.
-  Must be specified when cross-compiling for ACC.
-  Specifies the value of the ``CMAKE_TOOLCHAIN_FILE`` variable.
-  Defaults to the value of the ``CMAKE_TOOLCHAIN_FILE`` environment variable.
 
 Environment Variables
 ---------------------
