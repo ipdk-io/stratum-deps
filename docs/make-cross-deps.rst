@@ -110,7 +110,7 @@ Options
   Requests that ``sudo`` be used when installing the dependencies.
   The ``USE_SUDO`` listfile variable will be set to TRUE.
 
-Environment Variables
+Environment variables
 ---------------------
 
 ``CMAKE_TOOLCHAIN_FILE``
