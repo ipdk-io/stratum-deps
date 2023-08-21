@@ -1,9 +1,9 @@
+.. Copyright 2023 Intel Corporation
+   SPDX-License-Identifier: Apache 2.0
+
 ==================
 make-cross-deps.sh
 ==================
-
-.. Copyright 2023 Intel Corporation
-   SPDX-License-Identifier: Apache 2.0
 
 Helper script to build and install the Stratum dependencies for the
 Arm Compute Complex (ACC).

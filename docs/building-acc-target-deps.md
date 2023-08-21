@@ -1,10 +1,10 @@
-# Building Stratum dependencies for the ACC
+# Building ACC Target Dependencies
 
 This document explains how to build the Stratum dependencies for the
 ARM Compute Complex (ACC) of the Intel&reg; IPU E2100.
 
-> **Note**: To build the dependencies for a different target, see
-[Building Stratum dependencies](building-stratum-deps.md).
+> **Note**: To build the dependencies for the Host system, see
+[Building Host Dependencies](building-host-deps.md).
 
 ## Introduction
 

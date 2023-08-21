@@ -1,11 +1,11 @@
 # Change History
 
 This document summarizes the changes that have been made in the transtion
-from `networking-recipe/setup` to a standlone repository.
+from `networking-recipe/setup` to the `stratum-deps` repository.
 
 ## General changes
 
-### CMake list files
+### CMake listfiles
 
 - Change the default build type to Release.
 

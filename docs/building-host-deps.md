@@ -1,4 +1,4 @@
-# Building Stratum dependencies
+# Building Host Dependencies
 
 Stratum is the component of `infrap4d` that implements the P4Runtime and gNMI
 (OpenConfig) services. It requires  a number of third-party libraries, which
@@ -6,8 +6,9 @@ this package provides.
 
 This document explains how to build and install the Stratum dependencies.
 
-> **Note**: For the Intel&reg; IPU E2100, see
-[Building Stratum dependencies for the ACC](building-acc-stratum-deps.md).
+> **Note**: To build dependencies for the Arm Compute Complex (ACC) of the
+Intel&reg; IPU E2100, see
+[Building ACC Target Dependencies](building-acc-target-deps.md).
 
 ## Prerequisites
 
