@@ -16,6 +16,11 @@ The repository is functional, but it is still a work in progress.
 - [Building the Stratum Dependencies for ACC](/docs/building-acc-stratum-deps.md)
 - [Defining the ACC Build Environment](docs/defining-acc-environment.md)
 
+## Utilities
+
+- [make-cross-deps.sh](/docs/make-cross-deps.rst)
+- [make-host-deps.sh](/docs/make-host-deps.rst)
+
 ## Other documents
 
 - [Change History](docs/change_history.md)
