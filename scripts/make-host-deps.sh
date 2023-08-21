@@ -19,6 +19,10 @@
 # Abort on error.
 set -e
 
+#################
+# Check sysroot #
+#################
+
 if [ -n "${SDKTARGETSYSROOT}" ]; then
     echo ""
     echo "-----------------------------------------------------"
@@ -36,10 +40,10 @@ fi
 
 _BLD_DIR=build
 _CFG_ONLY=0
-_DRY_RUN=
-_PREFIX=hostdeps
+_DRY_RUN=0
 _NJOBS=8
-_SCOPE=minimal
+_PREFIX=hostdeps
+_SCOPE=full
 
 ##############
 # print_help #
@@ -54,16 +58,21 @@ print_help() {
     echo "  --prefix=DIR    -P  Install directory prefix [${_PREFIX}]"
     echo ""
     echo "Options:"
-    echo "  --config            Only perform configuration step"
-    echo "  --cxx=VERSION       CXX_STANDARD to specify [${_CXX_STD}]"
+    echo "  --config            Configure without building"
+    echo "  --cxx=STD           C++ standard to be used [${_CXX_STD}]"
     echo "  --dry-run       -n  Display cmake parameters and exit"
-    echo "  --force         -f  Specify -f when patching"
+    echo "  --force         -f  Specify -f when patching (deprecated)"
     echo "  --full              Build all dependency libraries [${_SCOPE}]"
     echo "  --jobs=NJOBS    -j  Number of build threads [${_NJOBS}]"
-    echo "  --minimal           Build required dependencies only [${_SCOPE}]"
+    echo "  --minimal           Build only required dependencies [${_SCOPE}]"
     echo "  --no-download       Do not download repositories"
     echo "  --no-patch          Do not patch source after downloading"
     echo "  --sudo              Use sudo when installing"
+    echo ""
+    echo "Configurations:"
+    echo "  --debug             Debug configuration"
+    echo "  --reldeb            RelWithDebInfo configuration"
+    echo "  --release           Release configuration"
     echo ""
 }
 
@@ -74,6 +83,7 @@ print_help() {
 print_cmake_params() {
     echo ""
     [ -n "${_GENERATOR}" ] && echo "${_GENERATOR}"
+    [ -n "${_BUILD_TYPE}" ] && echo "${_BUILD_TYPE:2}"
     echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
     [ -n "${_CXX_STD}" ] && echo "CXX_STANDARD=${_CXX_STD}"
     [ -n "${_ON_DEMAND}" ] && echo "${_ON_DEMAND:2}"
@@ -81,9 +91,10 @@ print_cmake_params() {
     [ -n "${_PATCH}" ] && echo "${_PATCH:2}"
     [ -n "${_FORCE_PATCH}" ] && echo "${_FORCE_PATCH:2}"
     [ -n "${_USE_SUDO}" ] && echo "${_USE_SUDO:2}"
+    echo "-B ${_BLD_DIR}"
     if [ ${_CFG_ONLY} -ne 0 ]; then
         echo ""
-        echo "Configure only (${_SCOPE} build)"
+        echo "Configure without building (${_SCOPE} build)"
         return
     fi
     echo "-j${_NJOBS}"
@@ -92,6 +103,23 @@ print_cmake_params() {
     echo "Will perform a ${_SCOPE} build"
 }
 
+################
+# config_build #
+################
+
+config_build() {
+    # shellcheck disable=SC2086
+    cmake -S . -B "${_BLD_DIR}" \
+        ${_GENERATOR} \
+        ${_BUILD_TYPE} \
+        -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
+        ${_CXX_STANDARD} \
+        ${_ON_DEMAND} \
+        ${_DOWNLOAD} \
+        ${_PATCH} \
+        ${_FORCE_PATCH} \
+        ${_USE_SUDO}
+}
 ######################
 # Parse command line #
 ######################
@@ -99,7 +127,8 @@ print_cmake_params() {
 SHORTOPTS=B:P:j:
 SHORTOPTS=${SHORTOPTS}fhn
 
-LONGOPTS=build:,cxx:,jobs:,prefix:
+LONGOPTS=build:,cxx-std:,jobs:,prefix:
+LONGOPTS=${LONGOPTS},debug,release,reldeb
 LONGOPTS=${LONGOPTS},config,dry-run,force,full,help,minimal,ninja
 LONGOPTS=${LONGOPTS},no-download,no-patch,sudo
 
@@ -109,33 +138,43 @@ eval set -- "${GETOPTS}"
 while true ; do
     case "$1" in
     # Paths
-    -B|--build)
+    --build|-B)
         _BLD_DIR=$2
         shift 2 ;;
-    -P|--prefix)
+    --prefix|-P)
         _PREFIX=$2
         shift 2 ;;
+    # Configurations
+    --debug)
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
+        shift ;;
+    --reldeb)
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+        shift ;;
+    --release)
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Release"
+        shift ;;
     # Options
     --config)
         _CFG_ONLY=1
         shift ;;
-    --cxx)
+    --cxx-std)
         _CXX_STD=$2
          shift 2 ;;
-    -n|--dry-run)
+    --dry-run|-n)
         _DRY_RUN=1
         shift ;;
-    -f|--force)
+    --force|-f)
         _FORCE_PATCH="-DFORCE_PATCH=TRUE"
         shift ;;
     --full)
         _SCOPE=full
         shift ;;
-    -h|--help)
+    --help|-h)
         print_help
         exit 99 ;;
-    -j|--jobs)
-        _JOBS=-j$2
+    --jobs|-j)
+        _NJOBS=$2
         shift 2 ;;
     --minimal)
         _SCOPE=minimal
@@ -170,7 +209,7 @@ if [ "${_SCOPE}" = minimal ]; then
     _TARGET="--target grpc"
 fi
 
-[ -n "${_CXX_STD}" ] && _CXX_STANDARD="${_CXX_STD}"
+[ -n "${_CXX_STD}" ] && _CXX_STANDARD="-DCXX_STANDARD=${_CXX_STD}"
 
 # Show parameters if this is a dry run
 if [ ${_DRY_RUN} -ne 0 ]; then
@@ -185,16 +224,7 @@ fi
 
 rm -fr "${_BLD_DIR}" "${_PREFIX}"
 
-# shellcheck disable=SC2086
-cmake -S . -B ${_BLD_DIR} \
-    ${_GENERATOR} \
-    -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
-    ${_CXX_STANDARD} \
-    ${_ON_DEMAND} \
-    ${_DOWNLOAD} \
-    ${_PATCH} \
-    ${_FORCE_PATCH} \
-    ${_USE_SUDO}
+config_build
 
 if [ ${_CFG_ONLY} -ne 0 ]; then
     # shellcheck disable=SC2086

@@ -10,6 +10,10 @@
 # Abort on error.
 set -e
 
+#################
+# Check sysroot #
+#################
+
 if [ -z "${SDKTARGETSYSROOT}" ]; then
     echo ""
     echo "-----------------------------------------------------"
@@ -27,8 +31,9 @@ _SYSROOT=${SDKTARGETSYSROOT}
 ##################
 
 _BLD_DIR=build
-_CFG_ONLY=false
-_DRY_RUN=false
+_CFG_ONLY=0
+_DRY_RUN=0
+_HOST_DIR=${HOST_INSTALL}
 _NJOBS=8
 _PREFIX=//opt/deps
 _TOOLFILE=${CMAKE_TOOLCHAIN_FILE}
@@ -47,21 +52,28 @@ print_help() {
     echo "  --prefix=DIR*    -P  Install directory prefix [${_PREFIX}]"
     echo "  --toolchain=FILE -T  CMake toolchain file"
     echo ""
-    echo "Options:"
-    echo "  --config             Only perform configuration step"
-    echo "  --cxx=VERSION        CXX_STANDARD to specify [${CXX_STD}]"
-    echo "  --dry-run        -n  Display cmake parameters and exit"
-    echo "  --force          -f  Specify -f when patching"
-    echo "  --jobs=NJOBS     -j  Number of build threads [${_NJOBS}]"
-    echo "  --no-download        Do not download repositories"
-    echo "  --sudo               Use sudo when installing"
-    echo ""
     echo "* '//' at the beginning of the directory path will be replaced"
     echo "  with the sysroot directory path."
     echo ""
+    echo "Options:"
+    echo "  --config             Configure without building"
+    echo "  --cxx=STD            C++ standard to be used [${_CXX_STD}]"
+    echo "  --dry-run        -n  Display cmake parameters and exit"
+    echo "  --force          -f  Specify -f when patching (deprecated)"
+    echo "  --jobs=NJOBS     -j  Number of build threads [${_NJOBS}]"
+    echo "  --no-download        Do not download repositories"
+    echo "  --no-patch           Do not patch source after downloading"
+    echo "  --sudo               Use sudo when installing"
+    echo ""
+    echo "Configurations:"
+    echo "  --debug              Debug configuration"
+    echo "  --reldeb             RelWithDebInfo configuration"
+    echo "  --release            Release configuration"
+    echo ""
     echo "Environment variables:"
     echo "  CMAKE_TOOLCHAIN_FILE - Default toolchain file"
-    echo "  SDKTARGETSYSROOT - sysroot directory"
+    echo "  HOST_INSTALL - Default host dependencies directory"
+    echo "  SDKTARGETSYSROOT - Sysroot directory"
     echo ""
 }
 
@@ -72,15 +84,41 @@ print_help() {
 print_cmake_params() {
     echo ""
     [ -n "${_GENERATOR}" ] && echo "${_GENERATOR}"
+    [ -n "${_BUILD_TYPE}" ] && echo "${_BUILD_TYPE:2}"
     echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
     echo "CMAKE_TOOLCHAIN_FILE=${_TOOLFILE}"
-    echo "JOBS=${_NJOBS}"
-    [ -n "${_CXX_STANDARD_OPTION}" ] && echo "${_CXX_STANDARD_OPTION:2}"
-    [ -n "${_DOWNLOAD}" ] && echo "${_DOWNLOAD:2}"
+    [ -n "${_CXX_STD}" ] && echo "CXX_STANDARD=${_CXX_STD}"
     [ -n "${_HOST_DEPEND_DIR}" ] && echo "${_HOST_DEPEND_DIR:2}"
+    [ -n "${_DOWNLOAD}" ] && echo "${_DOWNLOAD:2}"
+    [ -n "${_PATCH}" ] && echo "${_PATCH:2}"
     [ -n "${_FORCE_PATCH}" ] && echo "${_FORCE_PATCH:2}"
     [ -n "${_USE_SUDO}" ] && echo "${_USE_SUDO:2}"
-    echo ""
+    echo "-B ${_BLD_DIR}"
+    if [ ${_CFG_ONLY} -ne 0 ]; then
+        echo ""
+        echo "Configure without building"
+        return
+    fi
+    echo "-j${_NJOBS}"
+}
+
+################
+# config_build #
+################
+
+config_build() {
+    # shellcheck disable=SC2086
+    cmake -S . -B "${_BLD_DIR}" \
+        ${_GENERATOR} \
+        ${_BUILD_TYPE} \
+        -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
+        -DCMAKE_TOOLCHAIN_FILE="${_TOOLFILE}" \
+        ${_CXX_STANDARD} \
+        ${_HOST_DEPEND_DIR} \
+        ${_DOWNLOAD} \
+        ${_PATCH} \
+        ${_FORCE_PATCH} \
+        ${_USE_SUDO}
 }
 
 ######################
@@ -90,8 +128,11 @@ print_cmake_params() {
 SHORTOPTS=B:H:P:T:j:
 SHORTOPTS=${SHORTOPTS}hn
 
-LONGOPTS=build:,cxx:,hostdeps:,jobs:,prefix:,toolchain:
-LONGOPTS=${LONGOPTS},config,dry-run,force,help,ninja,no-download,sudo
+LONGOPTS=build:,hostdeps:,prefix:,toolchain:
+LONGOPTS=${LONGOPTS},cxx-std:,jobs:
+LONGOPTS=${LONGOPTS},debug,release,reldeb
+LONGOPTS=${LONGOPTS},config,dry-run,force,help,ninja
+LONGOPTS=${LONGOPTS},no-download,no-patch,sudo
 
 GETOPTS=$(getopt -o ${SHORTOPTS} --long ${LONGOPTS} -- "$@")
 eval set -- "${GETOPTS}"
@@ -99,35 +140,45 @@ eval set -- "${GETOPTS}"
 while true ; do
     case "$1" in
     # Paths
-    -B|--build)
+    --build|-B)
         _BLD_DIR=$2
         shift 2 ;;
-    -H|--hostdeps)
+    --hostdeps|-H)
         _HOST_DIR=$2
         shift 2 ;;
-    -P|--prefix)
+    --prefix|-P)
         _PREFIX=$2
         shift 2 ;;
-    -T|--toolchain)
+    --toolchain|-T)
         _TOOLFILE=$2
         shift 2 ;;
+    # Configurations
+    --debug)
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
+        shift ;;
+    --reldeb)
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+        shift ;;
+    --release)
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Release"
+        shift ;;
     # Options
     --config)
-        _CFG_ONLY=true
+        _CFG_ONLY=1
         shift ;;
-    --cxx)
-        _CXX_STANDARD_OPTION="-DCXX_STANDARD=$2"
+    --cxx-std)
+        _CXX_STD=$2
         shift 2 ;;
     --dry-run|-n)
-        _DRY_RUN=true
+        _DRY_RUN=1
         shift ;;
-    -f|--force)
+    --force|-f)
         _FORCE_PATCH="-DFORCE_PATCH=TRUE"
         shift ;;
-    -h|--help)
+    --help|-h)
         print_help
         exit 99 ;;
-    -j|--jobs)
+    --jobs|-j)
         _NJOBS=$2
         shift 2 ;;
     --ninja)
@@ -135,6 +186,9 @@ while true ; do
         shift ;;
     --no-download)
         _DOWNLOAD="-DDOWNLOAD=FALSE"
+        shift ;;
+    --no-patch)
+        _PATCH="-DPATCH=FALSE"
         shift ;;
     --sudo)
         _USE_SUDO="-DUSE_SUDO=TRUE"
@@ -155,13 +209,13 @@ done
 # Replace "//"" prefix with "${_SYSROOT}/""
 [ "${_PREFIX:0:2}" = "//" ] && _PREFIX="${_SYSROOT}/${_PREFIX:2}"
 
-if [ -n "${_HOST_DIR}" ]; then
-    _HOST_DEPEND_DIR="-DHOST_DEPEND_DIR=${_HOST_DIR}"
-fi
+[ -n "${_CXX_STD}" ] && _CXX_STANDARD="-DCXX_STANDARD=${_CXX_STD}"
+[ -n "${_HOST_DIR}" ] && _HOST_DEPEND_DIR="-DHOST_DEPEND_DIR=${_HOST_DIR}"
 
 # Show parameters if this is a dry run
-if [ "${_DRY_RUN}" = "true" ]; then
+if [ ${_DRY_RUN} -ne 0 ]; then
     print_cmake_params
+    echo ""
     exit 0
 fi
 
@@ -169,16 +223,11 @@ fi
 # Build dependencies #
 ######################
 
-rm -fr ${_BLD_DIR}
+rm -fr "${_BLD_DIR}"
 
-cmake -S . -B ${_BLD_DIR} \
-    "${_GENERATOR}" \
-    -DCMAKE_INSTALL_PREFIX=${_PREFIX} \
-    -DCMAKE_TOOLCHAIN_FILE=${_TOOLFILE} \
-    ${_HOST_DEPEND_DIR} \
-    ${_CXX_STANDARD_OPTION} \
-    ${_DOWNLOAD} ${_FORCE_PATCH} ${_USE_SUDO}
+config_build
 
-if [ "${_CFG_ONLY}" = "false" ]; then
-    cmake --build ${_BLD_DIR} -j${_NJOBS}
+if [ ${_CFG_ONLY} -ne 0 ]; then
+    # shellcheck disable=SC2086
+    cmake --build "${_BLD_DIR}" -j${_NJOBS}
 fi
