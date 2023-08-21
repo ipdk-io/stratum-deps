@@ -23,4 +23,4 @@ The repository is functional, but it is still a work in progress.
 
 ## Other documents
 
-- [Change History](docs/change_history.md)
+- [Change History](docs/change-history.md)

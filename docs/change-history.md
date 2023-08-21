@@ -5,24 +5,37 @@ from `networking-recipe/setup` to a standlone repository.
 
 ## General changes
 
-### Directory layout
+### CMake list files
 
-- Move script files to `scripts` subdirectory.
-
-- Move documentation to `docs` subdirectory.
-
-- Move downloaded repositories to `source` subdirectory.
-
-### Repository content
-
-- Add CODEOWNERS and LICENSE files.
-
-- Add README.md file.
-
-### CMake build files
+- Change the default build type to Release.
 
 - Refactor CMakeLists.txt file, creating a separate include file for each
   external package.
+
+- Don't define the CMAKE_TOOLCHAIN_FILE variable when building external
+  projects unless it is defined in the superproject.
+
+### Directory layout
+
+- Move documentation to `docs` subdirectory.
+
+- Move script files to `scripts` subdirectory.
+
+- Download repositories to `source` subdirectory.
+
+### Documentation
+
+- Overhaul build documentation.
+
+- Add user guides for the `make-host-deps.sh` and `make-cross-deps.sh`
+  helper scripts
+
+- Add Change History document.
+
+### Helper scripts
+
+- Implement `--debug`, `--release`, and `--reldeb` options to specify
+  the CMake build configuration.
 
 ### Package selection
 
@@ -38,23 +51,16 @@ from `networking-recipe/setup` to a standlone repository.
 
 - Move generated patch file to CMAKE_CURRENT_BINARY_DIR.
 
-### Documentation
+### Repository content
 
-- Overhaul build documentation.
+- Add CODEOWNERS and LICENSE files.
 
-- Add Ninja example to build instructions.
-
-- Add Change History document.
-
-### Configuration options
-
-- Don't define the CMAKE_TOOLCHAIN_FILE variable when building external
-  projects unless it is defined in the superproject.
+- Add README.md file.
 
 ## Individual packages
 
-Most of these changes were made in anticipation of upgrading to a more
-recent versions of the package.
+Most of these changes were made in anticipation of upgrading to more
+recent versions of packages.
 
 ### Abseil
 
@@ -81,4 +87,4 @@ recent versions of the package.
 
 - When we build Protobuf v23.x with BUILD_SHARED_LIBS=ON, we get
   undefined external references to `thread_cache_`. Work around
-  this problem by building Protobuf in static library mode.
+  this problem by making the libraries static instead of shared.
