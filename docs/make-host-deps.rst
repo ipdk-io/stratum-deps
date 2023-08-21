@@ -9,7 +9,7 @@ Helper script to build and install the Stratum dependencies for the
 x86 build system.
 
 Syntax
-------
+======
 
 .. code-block:: text
 
@@ -23,10 +23,10 @@ Syntax
       [--jobs=NJOBS | -j NJOBS]
 
 Command-line parameters
------------------------
+=======================
 
 Help
-~~~~
+----
 
 ``--dry-run``, ``-n``
   Displays the parameters that will be passed to CMake, and exits.
@@ -35,7 +35,7 @@ Help
   Displays usage information and exits.
 
 Paths
-~~~~~
+-----
 
 ``--build=BLDDIR``, ``-B BLDDIR``
   Directory that CMake will use to perform the build.
@@ -52,7 +52,7 @@ Paths
   Defaults to ``hostdeps``.
 
 Options
-~~~~~~~
+-------
 
 ``--config``
   Configures CMake but does not build the dependencies.
@@ -71,7 +71,7 @@ Options
 
 ``--full``
   Requests that the script build all the dependency libraries.
-  The opposite of the ``--minimal`` option.
+  The opposite of ``--minimal``.
   The default is ``--full``.
 
 ``--jobs=NJOBS``, ``-j NJOBS``
@@ -82,7 +82,7 @@ Options
 ``--minimal``
   Requests that the script build only the dependencies needed in the
   cross-compilation environment.
-  The opposite of the ``--full`` option, which is the default.
+  The opposite of ``--full``, which is the default.
 
 ``--no-download``
   Do not download the repositories.
@@ -100,10 +100,10 @@ Options
   The ``USE_SUDO`` listfile variable will be set to TRUE.
 
 Examples
---------
+========
 
 Build as an non-privileged user
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 To build the dependencies and install them in a user directory:
 
@@ -115,7 +115,7 @@ The source files will be downloaded and built, and the results will be
 installed in the ``~/hostdeps`` directory.
 
 Non-root build to a system directory
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------
 
 To install the Host dependencies in a system directory, log in as ``root``
 or build from an account that has ``sudo`` privilege.
@@ -128,7 +128,7 @@ CMake will build the dependencies as the current user and use ``sudo`` to
 install the libraries in ``/opt/deps``.
 
 Build and install as root
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 To build and install to a system directory when logged in as ``root``:
 
@@ -139,7 +139,7 @@ To build and install to a system directory when logged in as ``root``:
 CMake will build the dependencies and install them in ``/opt/ipdk/hostdeps``.
 
 Build without downloading
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 Once the source repositories have been downloaded, it is possible to do
 another build without downloading again:
@@ -150,4 +150,3 @@ another build without downloading again:
 
 The libraries will be built and installed in ``./hostdeps`` without
 downloading or patching the source code.
-

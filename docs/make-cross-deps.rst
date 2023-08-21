@@ -9,7 +9,7 @@ Helper script to build and install the Stratum dependencies for the
 Arm Compute Complex (ACC).
 
 Syntax
-------
+======
 
 .. code-block:: text
 
@@ -24,17 +24,17 @@ Syntax
       [--jobs=NJOBS | -j NJOBS]
 
 Variables
----------
+=========
 
 * A variable whose name begins with ``CMAKE_`` is defined by CMake.
 
 * A *listfile variable* is defined by the CMakeLists.txt file.
 
 Command-line parameters
------------------------
+=======================
 
 Help
-~~~~
+----
 
 ``--dry-run``, ``-n``
   Displays the parameters that will be passed to CMake, and exits.
@@ -43,7 +43,7 @@ Help
   Displays usage information and exits.
 
 Paths
-~~~~~
+-----
 
 ``--build=BLDDIR``, ``-B BLDDIR``
   Directory that CMake will use to perform the build.
@@ -73,7 +73,7 @@ Paths
   Defaults to the value of the ``CMAKE_TOOLCHAIN_FILE`` environment variable.
 
 Options
-~~~~~~~
+-------
 
 ``--config``
   Configures CMake but does not build the dependencies.
@@ -111,7 +111,7 @@ Options
   The ``USE_SUDO`` listfile variable will be set to TRUE.
 
 Environment variables
----------------------
+=====================
 
 ``CMAKE_TOOLCHAIN_FILE``
   Path to the CMake toolchain file to be used.
@@ -131,4 +131,3 @@ Environment variables
   dependencies will be built.
   Used in the toolchain file to set the ``CMAKE_SYSROOT`` variable.
   The target dependencies are usually installed under sysroot.
-
