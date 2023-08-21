@@ -1,34 +1,26 @@
-==================
-make-cross-deps.sh
-==================
+=================
+make-host-deps.sh
+=================
 
 .. Copyright 2023 Intel Corporation
    SPDX-License-Identifier: Apache 2.0
 
 Helper script to build and install the Stratum dependencies for the
-Arm Compute Complex (ACC).
+x86 build system.
 
 Syntax
 ------
 
 .. code-block:: text
 
-  ./scripts/make-cross-deps.sh \
-      [--help | -h]  [--dry-run -n] \
+  ./scripts/make-host-deps.sh \
+      [--help | -h]  [--dry-run | -n] \
       [--config]  [--cxx=STD] [--sudo] \
       [--no-download]  [--no-patch] \
+      [--minimal | --full] \
       [--build=BLDDIR | -B BLDDIR] \
-      [--host=HOSTDEPS | -H HOSTDEPS] \
       [--prefix=PREFIX | -P PREFIX] \
-      [--toolchain=TOOLFILE | -T TOOLFILE ] \
       [--jobs=NJOBS | -j NJOBS]
-
-Variables
----------
-
-* A variable whose name begins with ``CMAKE_`` is defined by CMake.
-
-* A *listfile variable* is defined by the CMakeLists.txt file.
 
 Command-line parameters
 -----------------------
@@ -53,24 +45,11 @@ Paths
   target dependencies.
   Defaults to ``build``.
 
-``--host=HOST``, ``-H HOST``
-  Directory in which the native (nost system) dependencies were installed.
-  Used to run the Protobuf compiler during the build.
-  Specifies the value of the ``HOST_DEPEND_DIR`` listfile variable.
-  Defaults to the value of the ``HOST_INSTALL`` environment variable.
-
 ``--prefix=PREFIX``, ``-P PREFIX``
-  Directory in which the target dependencies will be installed.
+  Directory in which the host dependencies will be installed.
   Will be created if it does not exist.
   Specifies the value of the ``CMAKE_INSTALL_PREFIX`` variable.
-  ``//`` at the beginning of the path is a shortcut. The script will
-  make the path relative to the sysroot directory.
-
-``--toolchain=FILE``, ``-T FILE``
-  CMake toolchain file.
-  Must be specified when cross-compiling.
-  Specifies the value of the ``CMAKE_TOOLCHAIN_FILE`` variable.
-  Defaults to the value of the ``CMAKE_TOOLCHAIN_FILE`` environment variable.
+  Defaults to ``hostdeps``.
 
 Options
 ~~~~~~~
@@ -90,10 +69,20 @@ Options
   Deprecated. If the repositories have already been patched, the
   ``--no-patch`` option bypasses the patch stage entirely.
 
+``--full``
+  Requests that the script build all the dependency libraries.
+  The opposite of the ``--minimal`` option.
+  The default is ``--full``.
+
 ``--jobs=NJOBS``, ``-j NJOBS``
   Number of build threads.
   Specifies the value of the ``-j`` CMake option.
   Defaults to 8.
+
+``--minimal``
+  Requests that the script build only the dependencies needed in the
+  cross-compilation environment.
+  The opposite of the ``--full`` option, which is the default.
 
 ``--no-download``
   Do not download the repositories.
@@ -110,25 +99,55 @@ Options
   Requests that ``sudo`` be used when installing the dependencies.
   The ``USE_SUDO`` listfile variable will be set to TRUE.
 
-Environment variables
----------------------
+Examples
+--------
 
-``CMAKE_TOOLCHAIN_FILE``
-  Path to the CMake toolchain file to be used.
-  Specifies the value of the ``CMAKE_TOOLCHAIN_FILE`` variable.
-  May be overridden by ``--toolchain=TOOLFILE``.
-  Must be set.
+Build as an non-privileged user
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``HOST_INSTALL``
-  Directory in which the Stratum dependencies for the host system were
-  installed
-  Specifies the default value of the ``--host`` option.
+To build the dependencies and install them in a user directory:
 
-``SDKTARGETSYSROOT``
-  Directory containing the Root File System (RFS) for the target system.
-  Must be set.
-  Provides the header files and libraries against which the target
-  dependencies will be built.
-  Used in the toolchain file to set the ``CMAKE_SYSROOT`` variable.
-  The target dependencies are usually installed under sysroot.
+.. code-block:: bash
+
+  ./scripts/make-host-deps.sh --prefix=~/hostdeps
+
+The source files will be downloaded and built, and the results will be
+installed in the ``~/hostdeps`` directory.
+
+Non-root build to a system directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To install the Host dependencies in a system directory, log in as ``root``
+or build from an account that has ``sudo`` privilege.
+
+.. code-block:: bash
+
+  ./scripts/make-host-deps.sh --prefix=/opt/deps --sudo
+
+CMake will build the dependencies as the current user and use ``sudo`` to
+install the libraries in ``/opt/deps``.
+
+Build and install as root
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To build and install to a system directory when logged in as ``root``:
+
+.. code-block:: bash
+
+  ./scripts/make-host-deps.sh --prefix=/opt/ipdk/hostdeps
+
+CMake will build the dependencies and install them in ``/opt/ipdk/hostdeps``.
+
+Build without downloading
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once the source repositories have been downloaded, it is possible to do
+another build without downloading again:
+
+.. code-block:: bash
+
+  ./scripts/make-host-deps.sh --no-download --no-patch --prefix=hostdeps
+
+The libraries will be built and installed in ``./hostdeps`` without
+downloading or patching the source code.
 

@@ -19,6 +19,7 @@ The repository is functional, but it is still a work in progress.
 ## Utilities
 
 - [make-cross-deps.sh](/docs/make-cross-deps.rst)
+- [make-host-deps.sh](/docs/make-host-deps.rst)
 
 ## Other documents
 
