@@ -38,7 +38,6 @@ fi
 # Default values #
 ##################
 
-_BLD_TYPE="Release"
 _BLD_DIR=build
 _CFG_ONLY=0
 _DRY_RUN=0
@@ -72,9 +71,8 @@ print_help() {
     echo ""
     echo "Configurations:"
     echo "  --debug             Debug configuration"
-    echo "  --minsize           MinSizeRel configuration"
     echo "  --reldeb            RelWithDebInfo configuration"
-    echo "  --release           Release configuration (default)"
+    echo "  --release           Release configuration"
     echo ""
 }
 
@@ -85,7 +83,7 @@ print_help() {
 print_cmake_params() {
     echo ""
     [ -n "${_GENERATOR}" ] && echo "${_GENERATOR}"
-    echo "CMAKE_BUILD_TYPE=${_BLD_TYPE}"
+    [ -n "${_BUILD_TYPE}" ] && echo "${_BUILD_TYPE:2}"
     echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
     [ -n "${_CXX_STD}" ] && echo "CXX_STANDARD=${_CXX_STD}"
     [ -n "${_ON_DEMAND}" ] && echo "${_ON_DEMAND:2}"
@@ -113,7 +111,7 @@ config_build() {
     # shellcheck disable=SC2086
     cmake -S . -B "${_BLD_DIR}" \
         ${_GENERATOR} \
-        -DCMAKE_BUILD_TYPE="${_BLD_TYPE}" \
+        ${_BUILD_TYPE} \
         -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
         ${_CXX_STANDARD} \
         ${_ON_DEMAND} \
@@ -130,7 +128,7 @@ SHORTOPTS=B:P:j:
 SHORTOPTS=${SHORTOPTS}fhn
 
 LONGOPTS=build:,cxx-std:,jobs:,prefix:
-LONGOPTS=${LONGOPTS},debug,release,minsize,reldeb
+LONGOPTS=${LONGOPTS},debug,release,reldeb
 LONGOPTS=${LONGOPTS},config,dry-run,force,full,help,minimal,ninja
 LONGOPTS=${LONGOPTS},no-download,no-patch,sudo
 
@@ -148,16 +146,13 @@ while true ; do
         shift 2 ;;
     # Configurations
     --debug)
-        _BLD_TYPE="Debug"
-        shift ;;
-    --minsize)
-        _BLD_TYPE="MinSizeRel"
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
         shift ;;
     --reldeb)
-        _BLD_TYPE="RelWithDebInfo"
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=RelWithDebInfo"
         shift ;;
     --release)
-        _BLD_TYPE="Release"
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Release"
         shift ;;
     # Options
     --config)

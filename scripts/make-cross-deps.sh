@@ -30,7 +30,6 @@ _SYSROOT=${SDKTARGETSYSROOT}
 # Default values #
 ##################
 
-_BLD_TYPE="Release"
 _BLD_DIR=build
 _CFG_ONLY=0
 _DRY_RUN=0
@@ -68,9 +67,8 @@ print_help() {
     echo ""
     echo "Configurations:"
     echo "  --debug              Debug configuration"
-    echo "  --minsize            MinSizeRel configuration"
     echo "  --reldeb             RelWithDebInfo configuration"
-    echo "  --release            Release configuration (default)"
+    echo "  --release            Release configuration"
     echo ""
     echo "Environment variables:"
     echo "  CMAKE_TOOLCHAIN_FILE - Default toolchain file"
@@ -86,7 +84,7 @@ print_help() {
 print_cmake_params() {
     echo ""
     [ -n "${_GENERATOR}" ] && echo "${_GENERATOR}"
-    echo "CMAKE_BUILD_TYPE=${_BLD_TYPE}"
+    [ -n "${_BUILD_TYPE}" ] && echo "${_BUILD_TYPE:2}"
     echo "CMAKE_INSTALL_PREFIX=${_PREFIX}"
     echo "CMAKE_TOOLCHAIN_FILE=${_TOOLFILE}"
     [ -n "${_CXX_STD}" ] && echo "CXX_STANDARD=${_CXX_STD}"
@@ -112,7 +110,7 @@ config_build() {
     # shellcheck disable=SC2086
     cmake -S . -B "${_BLD_DIR}" \
         ${_GENERATOR} \
-        -DCMAKE_BUILD_TYPE="${_BLD_TYPE}" \
+        ${_BUILD_TYPE} \
         -DCMAKE_INSTALL_PREFIX="${_PREFIX}" \
         -DCMAKE_TOOLCHAIN_FILE="${_TOOLFILE}" \
         ${_CXX_STANDARD} \
@@ -132,7 +130,7 @@ SHORTOPTS=${SHORTOPTS}hn
 
 LONGOPTS=build:,hostdeps:,prefix:,toolchain:
 LONGOPTS=${LONGOPTS},cxx-std:,jobs:
-LONGOPTS=${LONGOPTS},debug,release,minsize,reldeb
+LONGOPTS=${LONGOPTS},debug,release,reldeb
 LONGOPTS=${LONGOPTS},config,dry-run,force,help,ninja
 LONGOPTS=${LONGOPTS},no-download,no-patch,sudo
 
@@ -156,16 +154,13 @@ while true ; do
         shift 2 ;;
     # Configurations
     --debug)
-        _BLD_TYPE="Debug"
-        shift ;;
-    --minsize)
-        _BLD_TYPE="MinSizeRel"
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Debug"
         shift ;;
     --reldeb)
-        _BLD_TYPE="RelWithDebInfo"
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=RelWithDebInfo"
         shift ;;
     --release)
-        _BLD_TYPE="Release"
+        _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Release"
         shift ;;
     # Options
     --config)

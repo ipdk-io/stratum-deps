@@ -77,6 +77,13 @@ endif()
 # Configuration variables
 #-----------------------------------------------------------------------
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the build type." FORCE)
+endif()
+
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    "Debug;Release;RelWithDebInfo")
+
 if(NOT CMAKE_BUILD_TYPE STREQUAL "")
   set(cmake_BUILD_TYPE "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
 endif()
