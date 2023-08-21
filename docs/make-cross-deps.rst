@@ -1,9 +1,9 @@
+.. Copyright 2023 Intel Corporation
+   SPDX-License-Identifier: Apache 2.0
+
 ==================
 make-cross-deps.sh
 ==================
-
-.. Copyright 2023 Intel Corporation
-   SPDX-License-Identifier: Apache 2.0
 
 Helper script to build and install the Stratum dependencies for the
 Arm Compute Complex (ACC).
@@ -22,13 +22,6 @@ Syntax
       [--prefix=PREFIX | -P PREFIX] \
       [--toolchain=TOOLFILE | -T TOOLFILE ] \
       [--jobs=NJOBS | -j NJOBS]
-
-Variables
-=========
-
-* A variable whose name begins with ``CMAKE_`` is defined by CMake.
-
-* A *listfile variable* is defined by the CMakeLists.txt file.
 
 Command-line parameters
 =======================
@@ -109,6 +102,21 @@ Options
 ``--sudo``
   Requests that ``sudo`` be used when installing the dependencies.
   The ``USE_SUDO`` listfile variable will be set to TRUE.
+
+Configurations
+--------------
+
+``--debug``
+  Build with ``-DCMAKE_BUILD_TYPE=Debug``.
+  The compiler settings will default to ``-g``.
+
+``--reldeb``
+  Build with ``-DCMAKE_BUILD_TYPE=RelWithDebInfo``.
+  The compiler settings will default to ``-O2 -g -DNDEBUG``.
+
+``--release``
+  Build with ``-DCMAKE_BUILD_TYPE=Release``.
+  The compiler settings will default to ``-O3 -DNDEBUG``.
 
 Environment variables
 =====================

@@ -1,9 +1,9 @@
+.. Copyright 2023 Intel Corporation
+   SPDX-License-Identifier: Apache 2.0
+
 =================
 make-host-deps.sh
 =================
-
-.. Copyright 2023 Intel Corporation
-   SPDX-License-Identifier: Apache 2.0
 
 Helper script to build and install the Stratum dependencies for the
 x86 build system.
@@ -99,11 +99,26 @@ Options
   Requests that ``sudo`` be used when installing the dependencies.
   The ``USE_SUDO`` listfile variable will be set to TRUE.
 
+Configurations
+--------------
+
+``--debug``
+  Build with ``-DCMAKE_BUILD_TYPE=Debug``.
+  The compiler settings will default to ``-g``.
+
+``--reldeb``
+  Build with ``-DCMAKE_BUILD_TYPE=RelWithDebInfo``.
+  The compiler settings will default to ``-O2 -g -DNDEBUG``.
+
+``--release``
+  Build with ``-DCMAKE_BUILD_TYPE=Release``.
+  The compiler settings will default to ``-O3 -DNDEBUG``.
+
 Examples
 ========
 
-Build as an non-privileged user
--------------------------------
+Install as non-privileged user
+------------------------------
 
 To build the dependencies and install them in a user directory:
 
@@ -114,8 +129,8 @@ To build the dependencies and install them in a user directory:
 The source files will be downloaded and built, and the results will be
 installed in the ``~/hostdeps`` directory.
 
-Non-root build to a system directory
-------------------------------------
+Install to system directory (non-root)
+--------------------------------------
 
 To install the Host dependencies in a system directory, log in as ``root``
 or build from an account that has ``sudo`` privilege.
@@ -127,8 +142,8 @@ or build from an account that has ``sudo`` privilege.
 CMake will build the dependencies as the current user and use ``sudo`` to
 install the libraries in ``/opt/deps``.
 
-Build and install as root
--------------------------
+Install to system directory (root)
+----------------------------------
 
 To build and install to a system directory when logged in as ``root``:
 
@@ -150,3 +165,27 @@ another build without downloading again:
 
 The libraries will be built and installed in ``./hostdeps`` without
 downloading or patching the source code.
+
+Verify parameter settings
+-------------------------
+
+You can use the ``--dry-run`` or ``-n`` option to review the cmake parameter
+settings your build will use:
+
+.. code-block:: bash
+
+  ~/stratum-deps$ ./scripts/make-host-deps.sh -B build.host -j6 \
+      --no-download --no-patch --debug -n
+
+  CMAKE_BUILD_TYPE=Debug
+  CMAKE_INSTALL_PREFIX=hostdeps
+  DOWNLOAD=FALSE
+  PATCH=FALSE
+  -B build.host
+  -j6
+
+  Will perform a full build
+
+  ~/stratum-deps$
+
+No other action will be taken.
