@@ -138,7 +138,7 @@ variables needed for cross-compilation.
 
 ### Target build
 
-Source the file that the defines the ACC build environment:
+Source the file that defines the the ACC build environment:
 
 ```bash
 source acc-setup.env

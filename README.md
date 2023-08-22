@@ -12,8 +12,8 @@ The repository is functional, but it is still a work in progress.
 
 ## Build instructions
 
-- [Building the Stratum Dependencies](/docs/building-host-deps.md)
-- [Building the Stratum Dependencies for ACC](/docs/building-acc-target-deps.md)
+- [Building Host Dependencies](/docs/building-host-deps.md)
+- [Building ACC Target Dependencies](/docs/building-acc-target-deps.md)
 - [Defining the ACC Build Environment](docs/defining-acc-environment.md)
 
 ## Utilities
@@ -23,4 +23,4 @@ The repository is functional, but it is still a work in progress.
 
 ## Other documents
 
-- [Change History](docs/change-history.md)
+- [Change History](/docs/change-history.md)

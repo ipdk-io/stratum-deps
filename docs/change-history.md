@@ -1,7 +1,7 @@
 # Change History
 
-This document summarizes the changes that have been made in the transtion
-from `networking-recipe/setup` to the `stratum-deps` repository.
+This document summarizes the changes that have been made as part of the
+transition from `networking-recipe/setup` to the `stratum-deps` repository.
 
 ## General changes
 
@@ -28,7 +28,7 @@ from `networking-recipe/setup` to the `stratum-deps` repository.
 - Overhaul build documentation.
 
 - Add user guides for the `make-host-deps.sh` and `make-cross-deps.sh`
-  helper scripts
+  helper scripts.
 
 - Add Change History document.
 
@@ -36,6 +36,14 @@ from `networking-recipe/setup` to the `stratum-deps` repository.
 
 - Implement `--debug`, `--release`, and `--reldeb` options to specify
   the CMake build configuration.
+
+- Implement `--config` option to configure cmake without building.
+
+- Change default build scope from `--minimal` to `--full`.
+  (make-host-deps)
+
+- Change default install prefix from `host-deps` to `hostdeps`.
+  (make-host-deps)
 
 ### Package selection
 

@@ -10,7 +10,7 @@ This document explains how to build and install the Stratum dependencies.
 Intel&reg; IPU E2100, see
 [Building ACC Target Dependencies](building-acc-target-deps.md).
 
-## Prerequisites
+## Requirements
 
 Before you build the dependencies, you need to:
 
@@ -22,7 +22,7 @@ Before you build the dependencies, you need to:
 
   Note that P4 Control Plane is not compatible with BoringSSL.
 
-## Source code
+## Source
 
 Clone the repository to your development system:
 
