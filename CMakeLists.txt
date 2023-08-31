@@ -74,7 +74,7 @@ else()
 endif()
 
 #-----------------------------------------------------------------------
-# Configuration variables
+# CMAKE_BUILD_TYPE
 #-----------------------------------------------------------------------
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -83,6 +83,10 @@ endif()
 
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
     "Debug;Release;RelWithDebInfo")
+
+#-----------------------------------------------------------------------
+# Variables that affect all subbuilds
+#-----------------------------------------------------------------------
 
 if(NOT CMAKE_BUILD_TYPE STREQUAL "")
   set(deps_BUILD_TYPE "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
@@ -122,11 +126,12 @@ endif()
 
 #-----------------------------------------------------------------------
 # GetDownloadSpec
-#-----------------------------------------------------------------------
-
-# Generates the ExternalProject_Add() parameters needed to Download
+#
+# Generates the ExternalProject_Add() parameters needed to download
 # a git repository and returns them in the VAR parameter. Returns an
 # empty string if the DOWNLOAD option is false.
+#-----------------------------------------------------------------------
+
 function(GetDownloadSpec VAR _url _tag)
   if(DOWNLOAD)
     set(_spec
