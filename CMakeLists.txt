@@ -99,7 +99,16 @@ cmake_print_variables(CMAKE_PREFIX_PATH)
 cmake_print_variables(CMAKE_FIND_ROOT_PATH)
 
 #-----------------------------------------------------------------------
-# CXX_STANDARD
+# Set CURRENT_CXX_STANDARD to:
+#
+# 1) The value of the CXX_STANDARD script option, if set.
+# 2) The value of the CMAKE_CXX_STANDARD variable, if set.
+# 3) The default standard used by the C++ compiler, if this is a
+#    host build.
+#
+# We will pass the value to the Abseil and gRPC subbuilds.
+#
+# This is a fix for a Fedora 37 build issue.
 #-----------------------------------------------------------------------
 
 if(CXX_STANDARD)
