@@ -26,8 +26,8 @@ Syntax
 Command-line parameters
 =======================
 
-Help
-----
+General
+-------
 
 ``--dry-run``, ``-n``
   Displays the parameters that will be passed to CMake, and exits.
@@ -129,7 +129,7 @@ Environment variables
 
 ``HOST_INSTALL``
   Directory in which the Stratum dependencies for the host system were
-  installed
+  installed.
   Specifies the default value of the ``--host`` option.
 
 ``SDKTARGETSYSROOT``

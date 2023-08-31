@@ -25,8 +25,8 @@ Syntax
 Command-line parameters
 =======================
 
-Help
-----
+General
+-------
 
 ``--dry-run``, ``-n``
   Displays the parameters that will be passed to CMake, and exits.
