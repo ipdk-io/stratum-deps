@@ -7,6 +7,7 @@
 unset(_build_codegen_option)
 unset(_depends_clause)
 unset(_download_clause)
+unset(_grpc_cxx_standard)
 unset(_package_providers)
 unset(_patch_clause)
 
@@ -39,6 +40,10 @@ if(CMAKE_CROSSCOMPILING)
   set(_build_codegen_option -DgRPC_BUILD_CODEGEN=off)
 endif()
 
+if(DEFINED CURRENT_CXX_STANDARD AND NOT CURRENT_CXX_STANDARD STREQUAL "")
+  set(_grpc_cxx_standard -DCMAKE_CXX_STANDARD=${CURRENT_CXX_STANDARD})
+endif()
+
 GetDownloadSpec(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
 
 if(OVERRIDE_PKGS)
@@ -64,14 +69,14 @@ ExternalProject_Add(grpc
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/grpc
   CMAKE_ARGS
-    ${cmake_BUILD_TYPE}
-    ${cmake_TOOLCHAIN_FILE}
+    ${deps_BUILD_TYPE}
+    ${deps_TOOLCHAIN_FILE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
     -DCMAKE_INSTALL_RPATH=$ORIGIN
     -DCMAKE_POSITION_INDEPENDENT_CODE=on
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
-    ${cmake_CXX_STANDARD}
+    ${_grpc_cxx_standard}
     -DBUILD_SHARED_LIBS=on
     ${_package_providers}
     # gRPC builds BoringSSL, which is incompatible with libpython.

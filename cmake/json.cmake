@@ -12,8 +12,8 @@ ExternalProject_Add(json
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/json
   CMAKE_ARGS
-    ${cmake_BUILD_TYPE}
-    ${cmake_TOOLCHAIN_FILE}
+    ${deps_BUILD_TYPE}
+    ${deps_TOOLCHAIN_FILE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
     -DJSON_BuildTests=off
   INSTALL_COMMAND
