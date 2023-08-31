@@ -26,8 +26,8 @@ Syntax
 Command-line parameters
 =======================
 
-Help
-----
+General
+-------
 
 ``--dry-run``, ``-n``
   Displays the parameters that will be passed to CMake, and exits.
@@ -72,7 +72,7 @@ Options
   Configures CMake but does not build the dependencies.
   Can be used to verify the parameter settings that will be used.
 
-``cxx=STD``
+``--cxx=STD``
   C++ standard to be used by the compiler (11, 14, 17).
   Specifies the value of the ``CXX_STANDARD`` listfile variable.
 
@@ -129,7 +129,7 @@ Environment variables
 
 ``HOST_INSTALL``
   Directory in which the Stratum dependencies for the host system were
-  installed
+  installed.
   Specifies the default value of the ``--host`` option.
 
 ``SDKTARGETSYSROOT``

@@ -71,15 +71,11 @@ can be used to build the Host dependencies.
 - The `--dry-run` (`-n`) option displays the parameter values without
   running CMake
 
-The script normally does a minimal build, containing just the components
-needed for cross-compilation. Specify the `--full` parameter if you want
-to build all the libraries.
-
 ### Host build environment
 
 The Host and Target build environments are mutually incompatible.
- You must ensure that the  [ACC build environment](defining-acc-environment.md)
- is undefined when you build the Host dependencies.
+You must ensure that the [ACC build environment](defining-acc-environment.md)
+is undefined when you build the Host dependencies.
 
 ### User build
 
