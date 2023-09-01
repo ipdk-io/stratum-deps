@@ -12,8 +12,8 @@ ExternalProject_Add(gtest
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/gtest
   CMAKE_ARGS
-    ${cmake_BUILD_TYPE}
-    ${cmake_TOOLCHAIN_FILE}
+    ${deps_BUILD_TYPE}
+    ${deps_TOOLCHAIN_FILE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
     -DCMAKE_INSTALL_RPATH=$ORIGIN
     -DBUILD_SHARED_LIBS=on

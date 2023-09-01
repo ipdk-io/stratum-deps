@@ -74,7 +74,7 @@ else()
 endif()
 
 #-----------------------------------------------------------------------
-# Configuration variables
+# CMAKE_BUILD_TYPE
 #-----------------------------------------------------------------------
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -84,12 +84,16 @@ endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
     "Debug;Release;RelWithDebInfo")
 
+#-----------------------------------------------------------------------
+# Variables that affect all subbuilds
+#-----------------------------------------------------------------------
+
 if(NOT CMAKE_BUILD_TYPE STREQUAL "")
-  set(cmake_BUILD_TYPE "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+  set(deps_BUILD_TYPE "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
 endif()
 
 if(DEFINED CMAKE_TOOLCHAIN_FILE AND NOT CMAKE_TOOLCHAIN_FILE STREQUAL "")
-  set(cmake_TOOLCHAIN_FILE "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}")
+  set(deps_TOOLCHAIN_FILE "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}")
 endif()
 
 cmake_print_variables(CMAKE_BUILD_TYPE)
@@ -99,7 +103,16 @@ cmake_print_variables(CMAKE_PREFIX_PATH)
 cmake_print_variables(CMAKE_FIND_ROOT_PATH)
 
 #-----------------------------------------------------------------------
-# CXX_STANDARD
+# Set CURRENT_CXX_STANDARD to:
+#
+# 1) The value of the CXX_STANDARD script option, if set.
+# 2) The value of the CMAKE_CXX_STANDARD variable, if set.
+# 3) The default standard used by the C++ compiler, if this is a
+#    host build.
+#
+# We will pass the value to the Abseil and gRPC subbuilds.
+#
+# This is a fix for a Fedora 37 build issue.
 #-----------------------------------------------------------------------
 
 if(CXX_STANDARD)
@@ -111,18 +124,14 @@ elseif(NOT CMAKE_CROSSCOMPILING)
   get_cplusplus_standard(CURRENT_CXX_STANDARD)
 endif()
 
-if(DEFINED CURRENT_CXX_STANDARD AND NOT CURRENT_CXX_STANDARD STREQUAL "")
-  set(absl_CXX_STANDARD -DABSL_CXX_STANDARD=${CURRENT_CXX_STANDARD})
-  set(cmake_CXX_STANDARD -DCMAKE_CXX_STANDARD=${CURRENT_CXX_STANDARD})
-endif()
-
 #-----------------------------------------------------------------------
 # GetDownloadSpec
-#-----------------------------------------------------------------------
-
-# Generates the ExternalProject_Add() parameters needed to Download
+#
+# Generates the ExternalProject_Add() parameters needed to download
 # a git repository and returns them in the VAR parameter. Returns an
 # empty string if the DOWNLOAD option is false.
+#-----------------------------------------------------------------------
+
 function(GetDownloadSpec VAR _url _tag)
   if(DOWNLOAD)
     set(_spec

@@ -4,6 +4,15 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+unset(_abseil_cxx_standard)
+
+if(DEFINED CURRENT_CXX_STANDARD AND NOT CURRENT_CXX_STANDARD STREQUAL "")
+  set(_abseil_cxx_standard
+      -DABSL_CXX_STANDARD=${CURRENT_CXX_STANDARD}
+      -DCMAKE_CXX_STANDARD=${CURRENT_CXX_STANDARD}
+  )
+endif()
+
 GetDownloadSpec(DOWNLOAD_ABSL ${ABSEIL_GIT_URL} ${ABSEIL_GIT_TAG})
 
 ExternalProject_Add(abseil-cpp
@@ -12,14 +21,13 @@ ExternalProject_Add(abseil-cpp
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/abseil-cpp
   CMAKE_ARGS
-    ${cmake_BUILD_TYPE}
-    ${cmake_TOOLCHAIN_FILE}
+    ${deps_BUILD_TYPE}
+    ${deps_TOOLCHAIN_FILE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
     -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
     -DCMAKE_INSTALL_RPATH=$ORIGIN
-    ${absl_CXX_STANDARD}
-    ${cmake_CXX_STANDARD}
+    ${_abseil_cxx_standard}
     -DCMAKE_POSITION_INDEPENDENT_CODE=on
     -DCMAKE_INSTALL_RPATH=$ORIGIN
     -DABSL_PROPAGATE_CXX_STD=on
