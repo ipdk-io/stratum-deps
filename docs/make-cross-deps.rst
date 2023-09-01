@@ -15,7 +15,7 @@ Syntax
 
   ./scripts/make-cross-deps.sh \
       [--help | -h]  [--dry-run -n] \
-      [--config]  [--cxx=STD] [--sudo] \
+      [--no-build]  [--cxx=STD] [--sudo] \
       [--no-download]  [--no-patch] \
       [--build=BLDDIR | -B BLDDIR] \
       [--host=HOSTDEPS | -H HOSTDEPS] \
@@ -68,17 +68,12 @@ Paths
 Options
 -------
 
-``--config``
-  Configures CMake but does not build the dependencies.
-  Can be used to verify the parameter settings that will be used.
-
 ``--cxx=STD``
   C++ standard to be used by the compiler (11, 14, 17).
   Specifies the value of the ``CXX_STANDARD`` listfile variable.
 
 ``--force``, ``-f``
-  Requests that the ``-f`` (force) option be used when patching a
-  downloaded repository.
+  Use the ``-f`` (force) option when patching a downloaded repository.
   Specifies the value of the ``FORCE_PATCH`` listfile variable.
   Deprecated. If the repositories have already been patched, the
   ``--no-patch`` option bypasses the patch stage entirely.
@@ -87,6 +82,9 @@ Options
   Number of build threads.
   Specifies the value of the ``-j`` CMake option.
   Defaults to 8.
+
+``--no-build``
+  Configure CMake but do not build the dependencies.
 
 ``--no-download``
   Do not download the repositories.
@@ -100,7 +98,7 @@ Options
   The ``PATCH`` listfile variable will be set to FALSE.
 
 ``--sudo``
-  Requests that ``sudo`` be used when installing the dependencies.
+  Use ``sudo`` when installing the dependencies.
   The ``USE_SUDO`` listfile variable will be set to TRUE.
 
 Configurations

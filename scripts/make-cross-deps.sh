@@ -31,7 +31,7 @@ _SYSROOT=${SDKTARGETSYSROOT}
 ##################
 
 _BLD_DIR=build
-_CFG_ONLY=0
+_DO_BUILD=1
 _DRY_RUN=0
 _HOST_DIR=${HOST_INSTALL}
 _NJOBS=8
@@ -56,11 +56,11 @@ print_help() {
     echo "  with the sysroot directory path."
     echo ""
     echo "Options:"
-    echo "  --config             Configure without building"
     echo "  --cxx=STD            C++ standard to be used [${_CXX_STD}]"
     echo "  --dry-run        -n  Display cmake parameters and exit"
     echo "  --force          -f  Specify -f when patching (deprecated)"
     echo "  --jobs=NJOBS     -j  Number of build threads [${_NJOBS}]"
+    echo "  --no-build           Configure without building"
     echo "  --no-download        Do not download repositories"
     echo "  --no-patch           Do not patch source after downloading"
     echo "  --sudo               Use sudo when installing"
@@ -94,7 +94,7 @@ print_cmake_params() {
     [ -n "${_FORCE_PATCH}" ] && echo "${_FORCE_PATCH:2}"
     [ -n "${_USE_SUDO}" ] && echo "${_USE_SUDO:2}"
     echo "-B ${_BLD_DIR}"
-    if [ ${_CFG_ONLY} -ne 0 ]; then
+    if [ ${_DO_BUILD} -eq 0 ]; then
         echo ""
         echo "Configure without building"
         return
@@ -131,8 +131,8 @@ SHORTOPTS=${SHORTOPTS}hn
 LONGOPTS=build:,hostdeps:,prefix:,toolchain:
 LONGOPTS=${LONGOPTS},cxx-std:,jobs:
 LONGOPTS=${LONGOPTS},debug,release,reldeb
-LONGOPTS=${LONGOPTS},config,dry-run,force,help,ninja
-LONGOPTS=${LONGOPTS},no-download,no-patch,sudo
+LONGOPTS=${LONGOPTS},dry-run,force,help,ninja
+LONGOPTS=${LONGOPTS},no-build,no-download,no-patch,sudo
 
 GETOPTS=$(getopt -o ${SHORTOPTS} --long ${LONGOPTS} -- "$@")
 eval set -- "${GETOPTS}"
@@ -163,9 +163,6 @@ while true ; do
         _BUILD_TYPE="-DCMAKE_BUILD_TYPE=Release"
         shift ;;
     # Options
-    --config)
-        _CFG_ONLY=1
-        shift ;;
     --cxx-std)
         _CXX_STD=$2
         shift 2 ;;
@@ -183,6 +180,9 @@ while true ; do
         shift 2 ;;
     --ninja)
         _GENERATOR="-G Ninja"
+        shift ;;
+    --no-build)
+        _DO_BUILD=0
         shift ;;
     --no-download)
         _DOWNLOAD="-DDOWNLOAD=FALSE"
@@ -227,7 +227,7 @@ rm -fr "${_BLD_DIR}"
 
 config_build
 
-if [ ${_CFG_ONLY} -ne 0 ]; then
+if [ ${_DO_BUILD} -ne 0 ]; then
     # shellcheck disable=SC2086
     cmake --build "${_BLD_DIR}" -j${_NJOBS}
 fi
