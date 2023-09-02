@@ -22,5 +22,9 @@ rm -fr ${SOURCE_DIR}/protobuf/third_party/abseil-cpp
 rm -fr ${SOURCE_DIR}/protobuf/third_party/zlib
 
 # unused packages
+rm -fr ${SOURCE_DIR}/grpc/third_party/benchmark
 rm -fr ${SOURCE_DIR}/grpc/third_party/bloaty
 rm -fr ${SOURCE_DIR}/grpc/third_party/boringssl-with-bazel
+rm -fr ${SOURCE_DIR}/grpc/third_party/libuv
+
+rm -fr ${SOURCE_DIR}/protobuf/third_party/benchmark
