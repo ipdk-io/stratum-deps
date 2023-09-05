@@ -37,7 +37,7 @@ transition from `networking-recipe/setup` to the `stratum-deps` repository.
 - Implement `--debug`, `--release`, and `--reldeb` options to specify
   the CMake build configuration.
 
-- Implement `--config` option to configure cmake without building.
+- Implement `--no-build` option to configure cmake without building.
 
 - Change default build scope from `--minimal` to `--full`.
   (make-host-deps)
