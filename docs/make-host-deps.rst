@@ -165,7 +165,7 @@ another build without downloading again:
 The libraries will be built and installed in ``./hostdeps`` without
 downloading or patching the source code.
 
-Verify parameter settings
+Review parameter settings
 -------------------------
 
 You can use the ``--dry-run`` or ``-n`` option to review the cmake parameter
