@@ -15,7 +15,7 @@ Syntax
 
   ./scripts/make-host-deps.sh \
       [--help | -h]  [--dry-run | -n] \
-      [--config]  [--cxx=STD] [--sudo] \
+      [--no-build]  [--cxx=STD] [--sudo] \
       [--no-download]  [--no-patch] \
       [--minimal | --full] \
       [--build=BLDDIR | -B BLDDIR] \
@@ -54,10 +54,6 @@ Paths
 Options
 -------
 
-``--config``
-  Configures CMake but does not build the dependencies.
-  Can be used to verify the parameter settings that will be used.
-
 ``--cxx=STD``
   C++ standard to be used by the compiler (11, 14, 17).
   Specifies the value of the ``CXX_STANDARD`` listfile variable.
@@ -84,6 +80,9 @@ Options
   cross-compilation environment.
   The opposite of ``--full``, which is the default.
 
+``--no-build``
+  Configure CMake but do not build the dependencies.
+
 ``--no-download``
   Do not download the repositories.
   Use this option if building from a source package or from source that was
@@ -96,7 +95,7 @@ Options
   The ``PATCH`` listfile variable will be set to FALSE.
 
 ``--sudo``
-  Requests that ``sudo`` be used when installing the dependencies.
+  Use ``sudo`` when installing the dependencies.
   The ``USE_SUDO`` listfile variable will be set to TRUE.
 
 Configurations
