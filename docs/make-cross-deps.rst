@@ -35,8 +35,8 @@ General
 ``--help``, ``-h``
   Displays usage information and exits.
 
-Paths
------
+Host paths
+----------
 
 ``--build=BLDDIR``, ``-B BLDDIR``
   Directory that CMake will use to perform the build.
@@ -52,18 +52,22 @@ Paths
   Specifies the value of the ``HOST_DEPEND_DIR`` listfile variable.
   Defaults to the value of the ``HOST_INSTALL`` environment variable.
 
-``--prefix=PREFIX``, ``-P PREFIX``
-  Directory in which the target dependencies will be installed.
-  Will be created if it does not exist.
-  Specifies the value of the ``CMAKE_INSTALL_PREFIX`` variable.
-  ``//`` at the beginning of the path is a shortcut. The script will
-  make the path relative to the sysroot directory.
-
 ``--toolchain=FILE``, ``-T FILE``
   CMake toolchain file.
   Must be specified when cross-compiling.
   Specifies the value of the ``CMAKE_TOOLCHAIN_FILE`` variable.
   Defaults to the value of the ``CMAKE_TOOLCHAIN_FILE`` environment variable.
+
+Target paths
+------------
+
+``--prefix=PREFIX``, ``-P PREFIX``
+  Directory in which the target dependencies will be installed.
+  Will be created if it does not exist.
+  Specifies the value of the ``CMAKE_INSTALL_PREFIX`` variable.
+
+"``//``" at the beginning of the path is a shortcut. The script will
+make the path relative to the sysroot directory.
 
 Options
 -------
@@ -75,7 +79,8 @@ Options
 ``--force``, ``-f``
   Use the ``-f`` (force) option when patching a downloaded repository.
   Specifies the value of the ``FORCE_PATCH`` listfile variable.
-  Deprecated. If the repositories have already been patched, the
+
+  **Deprecated**: If the repositories have already been patched, the
   ``--no-patch`` option bypasses the patch stage entirely.
 
 ``--jobs=NJOBS``, ``-j NJOBS``
@@ -91,7 +96,9 @@ Options
   Use this option if building from a source package or from source that was
   previously downloaded.
   The ``DOWNLOAD`` listfile variable will be set to FALSE.
-  You will also want to specify ``--no-patch`` (or possibly ``--force``).
+
+  You will also want to specify ``--no-patch`` (or possibly ``--force``),
+  to prevent the download being patched a second time.
 
 ``--no-patch``
   Do not patch repositories after downloading them.
@@ -130,7 +137,7 @@ Environment variables
   installed.
   Specifies the default value of the ``--host`` option.
 
-``SDKTARGETSYSROOT``
+``SDKTARGETSYSROOT`` (required)
   Directory containing the Root File System (RFS) for the target system.
   Must be set.
   Provides the header files and libraries against which the target
