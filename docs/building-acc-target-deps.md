@@ -1,10 +1,10 @@
-# Building Stratum dependencies for the ACC
+# Building ACC Target Dependencies
 
 This document explains how to build the Stratum dependencies for the
 ARM Compute Complex (ACC) of the Intel&reg; IPU E2100.
 
-> **Note**: To build the dependencies for a different target, see
-[Building Stratum dependencies](building-stratum-deps.md).
+> **Note**: To build the dependencies for the Host system, see
+[Building Host Dependencies](building-host-deps.md).
 
 ## Introduction
 
@@ -22,7 +22,7 @@ You will need to build two versions of the libraries:
 
 The Host and Target libraries must be the same version.
 
-## Prerequisites
+## Requirements
 
 Before you build the dependencies, you need to:
 
@@ -39,7 +39,7 @@ Before you build the dependencies, you need to:
   See [Installing the ACC SDK](https://ipdk.io/p4cp-userguide/guides/es2k/installing-acc-sdk)
   for directions.
 
-## Source code
+## Source
 
 Clone this repository to your development system:
 
@@ -47,8 +47,8 @@ Clone this repository to your development system:
 git clone https://github.com/ipdk-io/stratum-deps.git
 ```
 
-The CMake script will download the source code for the libraries as the
-first step in the build.
+The build procedure will download the source code for the libraries
+as needed.
 
 ## Host dependencies
 
@@ -71,22 +71,18 @@ can be used to build the Host dependencies.
 - The `--dry-run` (`-n`) option displays the parameter values without
   running CMake
 
-The script normally does a minimal build, containing just the components
-needed for cross-compilation. Specify the `--full` parameter if you want
-to build all the libraries.
-
 ### Host build environment
 
 The Host and Target build environments are mutually incompatible.
- You must ensure that the  [ACC build environment](defining-acc-environment.md)
- is undefined when you build the Host dependencies.
+You must ensure that the [ACC build environment](defining-acc-environment.md)
+is undefined when you build the Host dependencies.
 
 ### User build
 
 To install the dependencies in a user directory:
 
 ```bash
-./make-host-deps.sh --prefix=PREFIX
+./scripts/make-host-deps.sh --prefix=PREFIX
 ```
 
 PREFIX might something like `~/hostdeps`.
@@ -100,7 +96,7 @@ To install the Host dependencies in a system directory, log in as `root`
 or build from an account that has `sudo` privilege.
 
 ```bash
-./make-host-deps.sh --prefix=PREFIX --sudo
+./scripts/make-host-deps.sh --prefix=PREFIX --sudo
 ```
 
 PREFIX might be something like `/opt/ipdk/x86deps`.
@@ -138,22 +134,16 @@ variables needed for cross-compilation.
 
 ### Target build
 
-Source the file that the defines the ACC build environment.
+Source the file that defines the the ACC build environment:
 
 ```bash
 source acc-setup.env
 ```
 
-Remove the `build` directory from the previous build.
+Run the build script:
 
 ```bash
-rm -fr build
-```
-
-Run the build script.
-
-```bash
-./make-cross-deps.sh --host=HOSTDEPS --prefix=PREFIX
+./scripts/make-cross-deps.sh --host=HOSTDEPS --prefix=PREFIX
 ```
 
 `HOSTDEPS` is the path to the Host dependencies, e.g., `~/p4cp-dev/hostdeps`.

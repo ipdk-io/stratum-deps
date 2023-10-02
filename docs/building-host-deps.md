@@ -1,4 +1,4 @@
-# Building Stratum dependencies
+# Building Host Dependencies
 
 Stratum is the component of `infrap4d` that implements the P4Runtime and gNMI
 (OpenConfig) services. It requires  a number of third-party libraries, which
@@ -6,10 +6,11 @@ this package provides.
 
 This document explains how to build and install the Stratum dependencies.
 
-> **Note**: For the Intel&reg; IPU E2100, see
-[Building Stratum dependencies for the ACC](building-acc-stratum-deps.md).
+> **Note**: To build dependencies for the Arm Compute Complex (ACC) of the
+Intel&reg; IPU E2100, see
+[Building ACC Target Dependencies](building-acc-target-deps.md).
 
-## Prerequisites
+## Requirements
 
 Before you build the dependencies, you need to:
 
@@ -21,7 +22,7 @@ Before you build the dependencies, you need to:
 
   Note that P4 Control Plane is not compatible with BoringSSL.
 
-## Source code
+## Source
 
 Clone the repository to your development system:
 
@@ -58,13 +59,13 @@ The CMake build script supports the following configuration options.
 | Option | Type | Description |
 | ------ | ---- | ----------- |
 | `CMAKE_INSTALL_PREFIX` | Path | Directory in which the dependencies should be installed. |
-| `CXX_STANDARD` | Number | C++ standard (11, 14, 17, etc.) the compiler should apply. (Default: not specified) |
-| `DOWNLOAD` | Boolean | Whether to download the source repositories. (Default: TRUE) |
-| `FORCE_PATCH` | Boolean | Whether to specify the force (`-f`) option when patching a downloaded repository. (deprecated) |
-| `ON_DEMAND` | Boolean | Whether to build only the specified target(s). If this option is FALSE, all targets will be built. (Default: FALSE) |
-| `PATCH` | Boolean | Whether to patch the source after downloading it. Should be FALSE if building source that was previously downloaded. (Default: TRUE)
-| `USE_LDCONFIG` | Boolean | Whether to use `ldconfig` to update the loader cache[1] after installing a module. Only valid if `USE_SUDO` is enabled. (Default: FALSE) |
-| `USE_SUDO` | Boolean | Whether to use `sudo` to install each module. (Default: FALSE) |
+| `CXX_STANDARD` | Number | C++ standard (11, 14, 17, etc.) the compiler should apply. (default: not specified) |
+| `DOWNLOAD` | Boolean | Whether to download the source repositories. (default: TRUE) |
+| `FORCE_PATCH` | Boolean | Whether to specify the force (`-f`) option when patching a downloaded repository. (default: FALSE) (deprecated) |
+| `ON_DEMAND` | Boolean | Whether to build only the specified target(s). If this option is FALSE, all targets will be built. (default: FALSE) |
+| `PATCH` | Boolean | Whether to patch the source after downloading it. Should be FALSE if building source that was previously downloaded. (default: TRUE) |
+| `USE_LDCONFIG` | Boolean | Whether to use `ldconfig` to update the loader cache[1] after installing a module. Only valid if `USE_SUDO` is enabled. (default: FALSE) |
+| `USE_SUDO` | Boolean | Whether to use `sudo` to install each module. (default: FALSE) |
 
 Boolean values are (`TRUE`, `YES`, `ON`) and (`FALSE`, `NO`, `OFF`).
 They may be upper or lower case.
