@@ -12,13 +12,13 @@ Intel&reg; IPU E2100, see
 
 ## Requirements
 
-Before you build the dependencies, you need to:
+Before you build the dependencies, you need to install:
 
-- Install CMake 3.15 or above
+- CMake 3.15 or above
 
   Avoid versions 3.24 and 3.25. They cause the dependencies build to fail.
 
-- Install OpenSSL 1.1
+- OpenSSL 3.x
 
   Note that P4 Control Plane is not compatible with BoringSSL.
 
@@ -132,6 +132,7 @@ cmake --build build -j6
 The libraries will be built and installed in `./hostdeps` without downloading
 or patching the source code.
 
+<!--
 ### Build using Ninja
 
 To build the Stratum dependencies using Ninja instead of GNU Make:
@@ -140,6 +141,7 @@ To build the Stratum dependencies using Ninja instead of GNU Make:
 cmake -B build -G Ninja -DCMAKE_INSTALL_PREFIX=deps
 cmake --build build -j6
 ```
+-->
 
 ### On-demand build
 

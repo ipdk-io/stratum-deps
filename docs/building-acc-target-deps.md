@@ -24,17 +24,17 @@ The Host and Target libraries must be the same version.
 
 ## Requirements
 
-Before you build the dependencies, you need to:
+Before you build the dependencies, you need to install:
 
-- Install CMake 3.15 or above
+- CMake 3.15 or above
 
   Avoid versions 3.24 and 3.25. They cause the dependencies build to fail.
 
-- Install OpenSSL 1.1
+- OpenSSL 3.x
 
   Note that P4 Control Plane is not compatible with BoringSSL.
 
-- Install the ACC SDK
+- The ACC SDK
 
   See [Installing the ACC SDK](https://ipdk.io/p4cp-userguide/guides/es2k/installing-acc-sdk)
   for directions.
