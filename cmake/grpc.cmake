@@ -12,11 +12,13 @@ unset(_package_providers)
 unset(_patch_clause)
 
 if(PATCH)
+  if(NOT DEFINED GRPC_VERSION OR GRPC_VERSION STREQUAL "")
+    message(FATAL_ERROR "GRPC_VERSION undefined; cannot select patch file")
+  endif()
   cmake_print_variables(GRPC_VERSION)
-  if(GRPC_VERSION VERSION_EQUAL 1.54.2)
-    set(_patchfile grpc-v1.54.2.patch.in)
-  else()
-    set(_patchfile grpc-v1.56.0.patch.in)
+  set(_patchfile grpc-v${GRPC_VERSION}.patch.in)
+  if(NOT EXISTS cmake/patches/${_patchfile})
+    message(FATAL_ERROR "Patch file for gRPC version ${GRPC_VERSION} not found")
   endif()
 
   # Patch the gRPC build script to set the RUNPATH of the installed
