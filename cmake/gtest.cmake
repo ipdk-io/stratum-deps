@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-GetDownloadSpec(DOWNLOAD_GTEST ${GTEST_GIT_URL} ${GTEST_GIT_TAG})
+GetDownloadClause(_download_clause ${GTEST_GIT_URL} ${GTEST_GIT_TAG})
 
 ExternalProject_Add(gtest
-  ${DOWNLOAD_GTEST}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/gtest

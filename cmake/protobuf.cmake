@@ -8,8 +8,6 @@ unset(_absl_provider)
 unset(_build_shared_libs)
 unset(_source_subdir)
 
-GetDownloadSpec(DOWNLOAD_PROTOBUF ${PROTOBUF_GIT_URL} ${PROTOBUF_GIT_TAG})
-
 # In older versions of protobuf, the primary CMakeLists.txt file
 # is in the cmake subdirectory.
 if(NOT RECENT_PKGS)
@@ -31,8 +29,10 @@ if(RECENT_PKGS)
   set(_absl_provider -Dprotobuf_ABSL_PROVIDER=package)
 endif()
 
+GetDownloadClause(_download_clause ${PROTOBUF_GIT_URL} ${PROTOBUF_GIT_TAG})
+
 ExternalProject_Add(protobuf
-  ${DOWNLOAD_PROTOBUF}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/protobuf

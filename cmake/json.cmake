@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-GetDownloadSpec(DOWNLOAD_JSON ${JSON_GIT_URL} ${JSON_GIT_TAG})
+GetDownloadClause(_download_clause ${JSON_GIT_URL} ${JSON_GIT_TAG})
 
 ExternalProject_Add(json
-  ${DOWNLOAD_JSON}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/json

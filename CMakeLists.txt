@@ -125,14 +125,14 @@ elseif(NOT CMAKE_CROSSCOMPILING)
 endif()
 
 #-----------------------------------------------------------------------
-# GetDownloadSpec
+# GetDownloadClause
 #
 # Generates the ExternalProject_Add() parameters needed to download
 # a git repository and returns them in the VAR parameter. Returns an
 # empty string if the DOWNLOAD option is false.
 #-----------------------------------------------------------------------
 
-function(GetDownloadSpec VAR _url _tag)
+function(GetDownloadClause VAR _url _tag)
   if(DOWNLOAD)
     set(_spec
       GIT_REPOSITORY  ${_url}
@@ -143,7 +143,7 @@ function(GetDownloadSpec VAR _url _tag)
     set(_spec "")
   endif()
   set(${VAR} ${_spec} PARENT_SCOPE)
-endfunction(GetDownloadSpec)
+endfunction(GetDownloadClause)
 
 #-----------------------------------------------------------------------
 # Dependencies

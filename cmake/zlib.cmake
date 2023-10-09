@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-GetDownloadSpec(DOWNLOAD_ZLIB ${ZLIB_GIT_URL} ${ZLIB_GIT_TAG})
+GetDownloadClause(_download_clause ${ZLIB_GIT_URL} ${ZLIB_GIT_TAG})
 
 ExternalProject_Add(zlib
-  ${DOWNLOAD_ZLIB}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/zlib
