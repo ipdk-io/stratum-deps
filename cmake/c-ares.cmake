@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-GetDownloadSpec(DOWNLOAD_CARES ${CARES_GIT_URL} ${CARES_GIT_TAG})
+GetDownloadClause(_download_clause ${CARES_GIT_URL} ${CARES_GIT_TAG})
 
 ExternalProject_Add(cares
-  ${DOWNLOAD_CARES}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/c-ares

@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-GetDownloadSpec(DOWNLOAD_GFLAGS ${GFLAGS_GIT_URL} ${GFLAGS_GIT_TAG})
+GetDownloadClause(_download_clause ${GFLAGS_GIT_URL} ${GFLAGS_GIT_TAG})
 
 ExternalProject_Add(gflags
-  ${DOWNLOAD_GFLAGS}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/gflags

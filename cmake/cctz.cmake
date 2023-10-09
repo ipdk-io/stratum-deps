@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-GetDownloadSpec(DOWNLOAD_CCTZ ${CCTZ_GIT_URL} ${CCTZ_GIT_TAG})
+GetDownloadClause(_download_clause ${CCTZ_GIT_URL} ${CCTZ_GIT_TAG})
 
 ExternalProject_Add(cctz
-  ${DOWNLOAD_CCTZ}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/cctz

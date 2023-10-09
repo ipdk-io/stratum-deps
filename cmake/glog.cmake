@@ -4,10 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-GetDownloadSpec(DOWNLOAD_GLOG ${GLOG_GIT_URL} ${GLOG_GIT_TAG})
+GetDownloadClause(_download_clause ${GLOG_GIT_URL} ${GLOG_GIT_TAG})
 
 ExternalProject_Add(glog
-  ${DOWNLOAD_GLOG}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/glog

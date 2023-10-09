@@ -46,8 +46,6 @@ if(DEFINED CURRENT_CXX_STANDARD AND NOT CURRENT_CXX_STANDARD STREQUAL "")
   set(_grpc_cxx_standard -DCMAKE_CXX_STANDARD=${CURRENT_CXX_STANDARD})
 endif()
 
-GetDownloadSpec(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
-
 if(OVERRIDE_PKGS)
   set(_package_providers
     -DgRPC_ABSL_PROVIDER=package
@@ -63,6 +61,8 @@ if(OVERRIDE_PKGS)
       zlib
   )
 endif()
+
+GetDownloadClause(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
 
 ExternalProject_Add(grpc
   ${_download_clause}

@@ -13,10 +13,10 @@ if(DEFINED CURRENT_CXX_STANDARD AND NOT CURRENT_CXX_STANDARD STREQUAL "")
   )
 endif()
 
-GetDownloadSpec(DOWNLOAD_ABSL ${ABSEIL_GIT_URL} ${ABSEIL_GIT_TAG})
+GetDownloadClause(_download_clause ${ABSEIL_GIT_URL} ${ABSEIL_GIT_TAG})
 
 ExternalProject_Add(abseil-cpp
-  ${DOWNLOAD_ABSL}
+  ${_download_clause}
 
   SOURCE_DIR
     ${DEPS_SOURCE_DIR}/abseil-cpp
