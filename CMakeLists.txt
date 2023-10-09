@@ -29,6 +29,7 @@ cmake_print_variables(CMAKE_PROJECT_VERSION)
 
 option(DOWNLOAD     "Download repositories" TRUE)
 option(FORCE_PATCH  "Specify -f when patching (deprecated)" FALSE)
+option(GIT_PROGRESS "Show Git progress" TRUE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
 option(OVERRIDE_PKGS "Use own versions of subpackages" TRUE)
 option(PATCH        "Patch source after downloading" TRUE)
@@ -137,8 +138,10 @@ function(GetDownloadClause VAR _url _tag)
     set(_clause
       GIT_REPOSITORY  ${_url}
       GIT_TAG         ${_tag}
-      GIT_PROGRESS    ON
     )
+    if(GIT_PROGRESS)
+      list(APPEND _clause GIT_PROGRESS ON)
+    endif()
   else()
     set(_clause "")
   endif()
