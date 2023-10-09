@@ -134,15 +134,15 @@ endif()
 
 function(GetDownloadClause VAR _url _tag)
   if(DOWNLOAD)
-    set(_spec
+    set(_clause
       GIT_REPOSITORY  ${_url}
       GIT_TAG         ${_tag}
       GIT_PROGRESS    ON
     )
   else()
-    set(_spec "")
+    set(_clause "")
   endif()
-  set(${VAR} ${_spec} PARENT_SCOPE)
+  set(${VAR} ${_clause} PARENT_SCOPE)
 endfunction(GetDownloadClause)
 
 #-----------------------------------------------------------------------
