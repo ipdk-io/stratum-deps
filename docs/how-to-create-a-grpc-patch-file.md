@@ -21,13 +21,13 @@ Make a copy of the `CMakeLists.txt` file.
 
   ```bash
   cd grpc-1.59.1
-  cp CMakeLists.txt CMakeLists.patched
+  cp CMakeLists.txt CMakeLists.patched.txt
   ```
 
 Load the copy into your favorite editor.
 
   ```bash
-  code CMakeLists.patched
+  code CMakeLists.patched.txt
   ```
 
 Find `add_executable(grpc_cpp_plugin`:
@@ -46,7 +46,7 @@ Insert a command to set the `INSTALL_RPATH` property between the
   add_executable(grpc_cpp_plugin
     src/compiler/cpp_plugin.cc
   )
-  set_target_properties(grpc_python_plugin
+  set_target_properties(grpc_cpp_plugin
     PROPERTIES INSTALL_RPATH @GRPC_INSTALL_RPATH@
   )
   target_compile_features(grpc_cpp_plugin PUBLIC cxx_std_14)
@@ -78,18 +78,20 @@ Save the modified file.
 
 ## Create patch file
 
-Use `diff -u` to generate a patch file.
+Use the `diff` command to generate a patch file.
 
   ```bash
-  diff -u CMakeLists.txt CMakeLists.patched > grpc-v1.59.1.patch.in
+  diff -u CMakeLists.txt CMakeLists.patched.txt > grpc-v1.59.1.patch.in
   ```
 
 The patch file should look something like this:
 
   ```bash
-  --- CMakeLists.txt      2023-10-06 16:44:58.000000000 -0700
-  +++ CMakeLists.patched  2023-10-09 14:31:58.204096300 -0700
-  @@ -12804,6 +12804,9 @@
+  diff --git a/CMakeLists.txt b/CMakeLists.patched.txt
+  index 14501a1..a032c3a 100644
+  --- a/CMakeLists.txt
+  +++ b/CMakeLists.patched.txt
+  @@ -12804,6 +12804,9 @@ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
   add_executable(grpc_cpp_plugin
     src/compiler/cpp_plugin.cc
   )
@@ -99,7 +101,7 @@ The patch file should look something like this:
   target_compile_features(grpc_cpp_plugin PUBLIC cxx_std_14)
   target_include_directories(grpc_cpp_plugin
     PRIVATE
-  @@ -13037,6 +13040,9 @@
+  @@ -13037,6 +13040,9 @@ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_PYTHON_PLUGIN)
   add_executable(grpc_python_plugin
     src/compiler/python_plugin.cc
   )
