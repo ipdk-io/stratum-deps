@@ -39,7 +39,7 @@ jobs:
       - name: Create tarballs
         run: |
           tar -czf /tmp/deps-source.tar.gz -C .. stratum-deps/
-          tar -czf /tmp/deps-linux-x86_64.tar.gz --transform='s/^tmp/##g' /tmp/deps
+          tar -czf /tmp/deps-linux-x86_64.tar.gz --transform='s#^tmp/##g' /tmp/deps
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3.1.3
