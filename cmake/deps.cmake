@@ -11,11 +11,11 @@ set(PROTOBUF_GIT_URL    https://github.com/google/protobuf.git)
 set(ZLIB_GIT_URL        https://github.com/madler/zlib)
 
 if(RECENT_PKGS)
-  set(ABSEIL_GIT_TAG    c2435f8342c2d0ed8101cb43adfd605fdc52dca2) # 20230125.3
+  set(ABSEIL_GIT_TAG    29bf8085f3bf17b84d30e34b3d7ff8248fda404e) # 20230802.0
   set(CARES_GIT_TAG     6360e96b5cf8e5980c887ce58ef727e53d77243a) # v1.19.1
-  set(GRPC_GIT_TAG      6e85620c7e258df79666a4743f862f2f82701c2d) # v1.56.0
-  set(GRPC_VERSION      1.56.0)
-  set(PROTOBUF_GIT_TAG  2c5fa078d8e86e5f4bd34e6f4c9ea9e8d7d4d44a) # v23.4
+  set(GRPC_GIT_TAG      0df9accc5c3478d126742fb84dd7155786dc4f68) # v1.59.1
+  set(GRPC_VERSION      1.59.1)
+  set(PROTOBUF_GIT_TAG  b2b7a51158418f41cff0520894836c15b1738721) # v24.3
   set(ZLIB_GIT_TAG      04f42ceca40f73e2978b50e93806c2a18c1281fc) # v1.2.13
 else()
   set(ABSEIL_GIT_TAG    273292d1cfc0a94a65082ee350509af1d113344d) # 20220623.0
