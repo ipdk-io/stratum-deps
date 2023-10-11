@@ -22,6 +22,12 @@ Stratum Dependencies Build Guide
 
 .. toctree::
    :maxdepth: 1
+   :caption: Development
+
+   how-to-create-a-grpc-patch-file
+
+.. toctree::
+   :maxdepth: 1
    :caption: Project
 
    change-history
