@@ -1,4 +1,6 @@
+<!-- markdownlint-disable MD041 -->
 [![Build Stratum dependencies](https://github.com/ipdk-io/stratum-deps/actions/workflows/build-deps.yml/badge.svg)](https://github.com/ipdk-io/stratum-deps/actions/workflows/build-deps.yml)
+<!-- markdownlint-disable MD041 -->
 
 # Stratum Dependencies
 
@@ -8,9 +10,13 @@ Stratum is the component of `infrap4d` that implements the P4Runtime and gNMI
 This repository allows you to build and install various third-party libraries
 required by Stratum.
 
-It is intended to supersede the `setup` directory in `networking-recipe`.
+We plan to phase out the
+[networking-recipe/setup](https://github.com/ipdk-io/networking-recipe/tree/main/setup)
+directory in favor of this repository toward the end of October 2023.
 
-The repository is functional, but it is still a work in progress.
+If you would list to start using `stratum-deps` before then,
+[version 1.2.0](https://github.com/ipdk-io/stratum-deps/tree/v1.2.0) is a
+good place to start.
 
 ## Build instructions
 
