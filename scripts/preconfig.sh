@@ -21,16 +21,13 @@ _PATCH=FALSE
 ######################
 
 SHORTOPTS=P:
-LONGOPTS=prefix:,download,no-download,patch,no-patch
+LONGOPTS=download,no-download,patch,no-patch
 
 GETOPTS=$(getopt -o ${SHORTOPTS} --long ${LONGOPTS} -- "$@")
 eval set -- "${GETOPTS}"
 
 while true ; do
   case "$1" in
-  --prefix|-P)
-    _PREFIX=$2
-    shift 2 ;;
   --download)
     _DOWNLOAD=TRUE
     shift ;;
@@ -69,10 +66,3 @@ cat >> source/preconfig.cmake << EOF
 set(DOWNLOAD ${_DOWNLOAD} CACHE BOOL "preconfig: Download repositories")
 set(PATCH ${_PATCH} CACHE BOOL "preconfig: Patch source after downloading")
 EOF
-
-if [ -n "${_PREFIX}" ]; then
-  _prefix=$(realpath ${_PREFIX})
- cat >> source/preconfig.cmake << EOF
-set(CMAKE_INSTALL_PREFIX "${_prefix}" CACHE PATH "" FORCE)
-EOF
-fi
