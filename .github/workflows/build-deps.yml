@@ -42,6 +42,9 @@ jobs:
           find . -name '.git*' -exec rm -fr {} +
           rm -fr build/
 
+      - name: Create presets file
+        run: ./scripts/create-presets.sh
+
       - name: Create tarballs
         run: |
           tar -czf /tmp/deps-source.tar.gz -C .. stratum-deps/
