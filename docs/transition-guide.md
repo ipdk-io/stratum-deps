@@ -8,9 +8,9 @@ to transition from the old repository to the new one.
 
 ## GitHub repository (URL)
 
-The Stratum dependencies build and installation logic has moved from
-[https://github.com/ipdk-io/networking-recipe/setup](https://github.com/ipdk-io/networking-recipe/tree/main/setup) to
-<https://github.com/ipdk-io/stratum-deps>.
+The Stratum dependencies were previously located at
+[https://github.com/ipdk-io/networking-recipe/setup](https://github.com/ipdk-io/networking-recipe/tree/main/setup).
+The new URL is <https://github.com/ipdk-io/stratum-deps>.
 
 You will need to update any documentation or procedures you maintain (e.g.,
 script files) that specify (a) the URL of the repository, or (b) the path to
@@ -97,3 +97,16 @@ set(PATCH FALSE CACHE BOOL "preconfig: Patch source after downloading")
 The `DOWNLOAD` and `PATCH` options will now be disabled by default,
 removing the need for the user to specify these options when building
 the dependencies for themselves.
+
+## Releases
+
+We have begun using the GitHub [Releases](https://github.com/ipdk-io/stratum-deps/releases)
+feature to define numbered versions of the Stratum dependencies package, each
+with its own release notes and build artifacts.
+
+The plan is to provide prebuilt binaries that can be downloaded and used
+as an "off-the-shelf" alternative to the "do-it-yourself" process of
+downloading and building the dependencies yourself. The current offering
+is an Ubuntu 22.04 build that is suitable for use in GitHub workflows.
+
+There is also a source package.
