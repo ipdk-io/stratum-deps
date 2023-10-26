@@ -25,7 +25,6 @@ env:
   #---------------------------------------------------------------------
   # Environment variables
   #---------------------------------------------------------------------
-  DEPS_RUNNER: ubuntu-latest
   DEPS_INSTALL_DIR: /opt/p4dev/x86deps
   DEPS_SRC_ARTIFACT: deps-source
   DEPS_SRC_TARBALL: deps-source.tar.gz
