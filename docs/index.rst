@@ -31,3 +31,4 @@ Stratum Dependencies Build Guide
    :caption: Project
 
    change-history
+   Transition Guide <transition-guide>
