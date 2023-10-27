@@ -10,13 +10,14 @@ Stratum is the component of `infrap4d` that implements the P4Runtime and gNMI
 This repository allows you to build and install various third-party libraries
 required by Stratum.
 
-We plan to phase out the
-[networking-recipe/setup](https://github.com/ipdk-io/networking-recipe/tree/main/setup)
-directory in favor of this repository around the end of October 2023.
+## Project status
 
-If you would like to start using `stratum-deps` before then,
-[version 1.2.1](https://github.com/ipdk-io/stratum-deps/tree/v1.2.1) is a
-good place to start.
+The `stratum-deps` repository supersedes the
+[networking-recipe/setup](https://github.com/ipdk-io/networking-recipe/tree/main/setup)
+directory, which will be phased out around the end of October 2023.
+
+You can start using `stratum-deps` now. The most recent release is
+[version 1.2.1](https://github.com/ipdk-io/stratum-deps/tree/v1.2.1).
 
 See the [Transition Guide](/docs/transition-guide.md) for more information.
 
@@ -26,7 +27,7 @@ See the [Transition Guide](/docs/transition-guide.md) for more information.
 - [Building ACC Target Dependencies](/docs/building-acc-target-deps.md)
 - [Defining the ACC Build Environment](docs/defining-acc-environment.md)
 
-## Utilities
+## Helper scripts
 
 - [make-cross-deps.sh](/docs/make-cross-deps.rst)
 - [make-host-deps.sh](/docs/make-host-deps.rst)
