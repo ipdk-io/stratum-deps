@@ -12,11 +12,13 @@ required by Stratum.
 
 We plan to phase out the
 [networking-recipe/setup](https://github.com/ipdk-io/networking-recipe/tree/main/setup)
-directory in favor of this repository toward the end of October 2023.
+directory in favor of this repository around the end of October 2023.
 
-If you would list to start using `stratum-deps` before then,
-[version 1.2.0](https://github.com/ipdk-io/stratum-deps/tree/v1.2.0) is a
+If you would like to start using `stratum-deps` before then,
+[version 1.2.1](https://github.com/ipdk-io/stratum-deps/tree/v1.2.1) is a
 good place to start.
+
+See the [Transition Guide](/docs/transition-guide.md) for more information.
 
 ## Build instructions
 
@@ -28,7 +30,3 @@ good place to start.
 
 - [make-cross-deps.sh](/docs/make-cross-deps.rst)
 - [make-host-deps.sh](/docs/make-host-deps.rst)
-
-## Other documents
-
-- [Change History](/docs/change-history.md)
