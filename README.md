@@ -17,7 +17,7 @@ The `stratum-deps` repository supersedes the
 directory, which will be phased out around the end of October 2023.
 
 You can start using `stratum-deps` now. The most recent release is
-[version 1.2.1](https://github.com/ipdk-io/stratum-deps/tree/v1.2.1).
+[version 1.2.1](https://github.com/ipdk-io/stratum-deps/releases/tag/v1.2.1).
 
 See the [Transition Guide](/docs/transition-guide.md) for more information.
 
