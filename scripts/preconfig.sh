@@ -60,9 +60,11 @@ fi
 
 if [ -e source/preconfig.cmake ]; then
   echo "Removing existing preconfig.cmake file"
+  rm source/preconfig.cmake
 fi
 
 cat >> source/preconfig.cmake << EOF
+# Override default values
 set(DOWNLOAD ${_DOWNLOAD} CACHE BOOL "preconfig: Download repositories")
 set(PATCH ${_PATCH} CACHE BOOL "preconfig: Patch source after downloading")
 EOF
