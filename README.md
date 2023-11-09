@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD041 -->
 [![Build Stratum dependencies](https://github.com/ipdk-io/stratum-deps/actions/workflows/build-deps.yml/badge.svg)](https://github.com/ipdk-io/stratum-deps/actions/workflows/build-deps.yml)
-<!-- markdownlint-disable MD041 -->
+<!-- markdownlint-enable MD041 -->
 
 # Stratum Dependencies
 
