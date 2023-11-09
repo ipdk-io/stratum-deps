@@ -8,14 +8,6 @@ unset(_absl_provider)
 unset(_build_shared_libs)
 unset(_source_subdir)
 
-# -- Following is not needed after move to protobuf v25.0
-# Leaving it commented if older versions needs to be tested
-# In older versions of protobuf, the primary CMakeLists.txt file
-# is in the cmake subdirectory.
-#if(NOT RECENT_PKGS)
-#set(_source_subdir SOURCE_SUBDIR cmake)
-#endif()
-
 # Protobuf v23.x generates unresolved external references to
 # ThreadSafeArena::ThreadCache _thread_cache if BUILD_SHARED_LIBS=ON.
 if(RECENT_PKGS)
