@@ -26,7 +26,7 @@ function(get_cplusplus_standard CXX_STANDARD)
     )
 
     if(run_status EQUAL FAILED_TO_RUN OR NOT build_status)
-      set(_default "201103")
+      set(_default "201402")
       message(WARNING
         "Cannot get _cplusplus value from compiler. Defaulting to ${_default}."
       )
@@ -55,4 +55,5 @@ function(get_cplusplus_standard CXX_STANDARD)
   endif()
 
   set(${CXX_STANDARD} ${cxx_standard} PARENT_SCOPE)
+  set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 endfunction()

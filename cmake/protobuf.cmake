@@ -10,18 +10,18 @@ unset(_source_subdir)
 
 # Protobuf v23.x generates unresolved external references to
 # ThreadSafeArena::ThreadCache _thread_cache if BUILD_SHARED_LIBS=ON.
-if(RECENT_PKGS)
-  set(_build_shared_libs off)
-else()
-  set(_build_shared_libs on)
-endif()
+#if(RECENT_PKGS)
+#  set(_build_shared_libs off)
+#else()
+set(_build_shared_libs on)
+#endif()
 
 # Protobuf v23.x bundles its own copy of Abseil.
 # We suppress it in favor of our own version or the
 # version bundles with gRPC.
-if(RECENT_PKGS)
-  set(_absl_provider -Dprotobuf_ABSL_PROVIDER=package)
-endif()
+#if(RECENT_PKGS)
+set(_absl_provider -Dprotobuf_ABSL_PROVIDER=package)
+#endif()
 
 GetDownloadClause(_download_clause ${PROTOBUF_GIT_URL} ${PROTOBUF_GIT_TAG})
 
