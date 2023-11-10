@@ -14,8 +14,6 @@ from pprint import pprint
 import sys
 
 MANIFEST_FILE = "manifest.json"
-CMAKE_FILE = "deps.cmake"
-VERSION_FILE = "version.json"
 
 CMAKE_HEADER = \
 """# URL and TAG definitions for dependencies
@@ -29,15 +27,33 @@ CMAKE_HEADER = \
 
 logger = logging.getLogger('manifest')
 
-def read_manifest(fname):
-    """Read json file and return manifest"""
-    path = os.path.join(os.path.dirname(__file__), fname)
-    with open(path, 'r') as f:
-        manifest = json.load(f)
-    return manifest
+errcount = 0
 
 #-----------------------------------------------------------------------
-# write_cmake_file
+# error()
+#-----------------------------------------------------------------------
+def error(msg, *args, **kwargs):
+    """Logs an error and increments the error count."""
+    global errcount
+    logger.error(msg, *args, **kwargs)
+    errcount += 1
+    return
+
+#-----------------------------------------------------------------------
+# read_manifest()
+#-----------------------------------------------------------------------
+def read_manifest(fname):
+    """Read json file and return manifest"""
+    try:
+        with open(fname, 'r') as f:
+            return json.load(f)
+    except IOError as ex:
+        logger.error("Error opening manifest file: %s", ex)
+        exit(2)
+    return
+
+#-----------------------------------------------------------------------
+# write_cmake_file()
 #-----------------------------------------------------------------------
 def write_cmake_file(manifest, out):
     write_cmake_header(out)
@@ -123,17 +139,76 @@ def version_packages(manifest):
     return [x for x in manifest if 'tag' in manifest[x]]
 
 #-----------------------------------------------------------------------
+# process_args()
+#
+# Processes command-line parameters after they have been parsed.
+#-----------------------------------------------------------------------
+def process_args(args):
+    process_format_param(args)
+    process_manifest_param(args)
+    process_output_param(args)
+    return
+
+def process_format_param(args):
+    if args.format is None:
+        error("No output format specified")
+        return
+    format = args.format.lower()
+    if format in ['cmake', 'version']:
+        args.format = format
+    else:
+        error("Invalid output format: '%s'", args.format)
+    return
+
+def process_manifest_param(args):
+    if args.manifest is None:
+        args.manifest = os.path.join(os.path.dirname(__file__), MANIFEST_FILE)
+    return
+
+def process_output_param(args):
+    if args.outfile is None:
+        args.outfile = '/dev/stdout'
+    return
+
+#-----------------------------------------------------------------------
+# create_parser() - Creates the command-line parser.
+#-----------------------------------------------------------------------
+def create_parser():
+    parser = argparse.ArgumentParser(
+        prog='manifest.py',
+        description='Generates files from manifest.json.')
+
+    parser.add_argument('--format', '-f', type=str,
+                        help='output file format (cmake|version)')
+
+    parser.add_argument('--manifest', '-m', type=str,
+                        help='manifest file to load')
+
+    parser.add_argument('--output', '-o', dest='outfile',
+                        help='output file path')
+
+    return parser
+
+#-----------------------------------------------------------------------
 # main
 #-----------------------------------------------------------------------
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
-    manifest = read_manifest(MANIFEST_FILE)
+    parser = create_parser()
+    args = parser.parse_args()
+    process_args(args)
 
-    with open(CMAKE_FILE, 'w') as outfile:
-        write_cmake_file(manifest, outfile)
+    if errcount != 0:
+        exit(1)
 
-    with open(VERSION_FILE, 'w') as outfile:
-        write_version_file(manifest, "main", outfile)
+    manifest = read_manifest(args.manifest)
 
-# __main__
+    with open(args.outfile, 'w') as outfile:
+        if args.format == 'cmake':
+            write_cmake_file(manifest, outfile)
+        elif args.format == 'version':
+            write_version_file(manifest, "main", outfile)
+    # end with
+
+# end __main__
