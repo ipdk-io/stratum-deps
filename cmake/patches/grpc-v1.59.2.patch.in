@@ -1,0 +1,33 @@
+# Copyright 2023 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# Updated to gRPC v1.59.1
+
+# Patch the gRPC build script to set the RUNPATH of the installed
+# Protobuf compiler plugins to the relative paths of the library
+# directories.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b272816..47a4154 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12853,6 +12853,9 @@ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
+ add_executable(grpc_cpp_plugin
+   src/compiler/cpp_plugin.cc
+ )
++set_target_properties(grpc_cpp_plugin
++  PROPERTIES INSTALL_RPATH @GRPC_INSTALL_RPATH@
++)
+ target_compile_features(grpc_cpp_plugin PUBLIC cxx_std_14)
+ target_include_directories(grpc_cpp_plugin
+   PRIVATE
+@@ -13086,6 +13089,9 @@ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_PYTHON_PLUGIN)
+ add_executable(grpc_python_plugin
+   src/compiler/python_plugin.cc
+ )
++set_target_properties(grpc_python_plugin
++  PROPERTIES INSTALL_RPATH @GRPC_INSTALL_RPATH@
++)
+ target_compile_features(grpc_python_plugin PUBLIC cxx_std_14)
+ target_include_directories(grpc_python_plugin
+   PRIVATE
