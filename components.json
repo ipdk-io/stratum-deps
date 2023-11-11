@@ -1,8 +1,8 @@
 {
     "abseil": {
         "name": "abseil-cpp",
-        "sha": "273292d1cfc0a94a65082ee350509af1d113344d",
-        "tag": "20220623.0",
+        "sha": "29bf8085f3bf17b84d30e34b3d7ff8248fda404e",
+        "tag": "20230802.0",
         "url": "https://github.com/abseil/abseil-cpp.git"
     },
     "cares": {
@@ -31,10 +31,10 @@
     },
     "grpc": {
         "name": "grpc",
-        "sha": "8871dab19b4ab5389e28474d25cfeea61283265c",
-        "tag": "v1.54.2",
+        "sha": "883e5f76976b86afee87415dc67bde58d9b295a4",
+        "tag": "v1.59.2",
         "url": "https://github.com/google/grpc.git",
-        "version": "1.54.2"
+        "version": "1.59.2"
     },
     "gtest": {
         "name": "gtest",
@@ -50,9 +50,10 @@
     },
     "protobuf": {
         "name": "protobuf",
-        "sha": "fe271ab76f2ad2b2b28c10443865d2af21e27e0e",
-        "tag": "v3.20.3",
-        "url": "https://github.com/google/protobuf.git"
+        "sha": "6b5d8db01fe47478e8d400f550e797e6230d464e",
+        "tag": "v25.0",
+        "url": "https://github.com/google/protobuf.git",
+        "version": "25.0"
     },
     "zlib": {
         "name": "zlib",
