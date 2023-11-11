@@ -71,6 +71,7 @@ def write_cmake_package(pkg, name, out):
     write_cmake_url(name, pkg, out)
     write_cmake_tag(name, pkg, out)
     write_cmake_version(name, pkg, out)
+    write_cmake_defines(name, pkg, out)
     return
 
 def write_cmake_url(name, pkg, out):
@@ -105,6 +106,14 @@ def write_cmake_version(name, pkg, out):
     version = optional(pkg, 'version')
     if version is not None:
         out.write('set({}_VERSION "{}")\n'.format(name, version))
+    return
+
+def write_cmake_defines(name, pkg, out):
+    defines = optional(pkg, 'defines')
+    if defines is None:
+        return
+    for key in sorted(defines.keys()):
+        out.write('set({}_{} "{}")\n'.format(name, key, defines[key]))
     return
 
 def required(pkg, item):
