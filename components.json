@@ -1,0 +1,64 @@
+{
+    "abseil": {
+        "name": "abseil-cpp",
+        "url": "https://github.com/abseil/abseil-cpp.git",
+        "sha": "29bf8085f3bf17b84d30e34b3d7ff8248fda404e",
+        "tag": "20230802.0"
+    },
+    "cares": {
+        "name": "c-ares",
+        "url": "https://github.com/c-ares/c-ares.git",
+        "sha": "6360e96b5cf8e5980c887ce58ef727e53d77243a",
+        "tag": "v1.19.1"
+    },
+    "cctz": {
+        "name": "cctz",
+        "url": "https://github.com/google/cctz.git",
+        "sha": "02918d62329ef440935862719829d061a5f4beba",
+        "label": "master~25"
+    },
+    "gflags": {
+        "name": "gflags",
+        "url": "https://github.com/gflags/gflags.git",
+        "sha": "827c769e5fc98e0f2a34c47cef953cc6328abced",
+        "label": "master~5"
+    },
+    "glog": {
+        "name": "glog",
+        "url": "https://github.com/google/glog.git",
+        "sha": "a8e0007e96ff96145022c488e367da10f835c75d",
+        "tag": "v0.6.0-rc1"
+    },
+    "grpc": {
+        "name": "grpc",
+        "url": "https://github.com/google/grpc.git",
+        "sha": "883e5f76976b86afee87415dc67bde58d9b295a4",
+        "tag": "v1.59.2",
+        "version": "1.59.2"
+    },
+    "gtest": {
+        "name": "gtest",
+        "url": "https://github.com/google/googletest.git",
+        "sha": "e2239ee6043f73722e7aa812a459f54a28552929",
+        "tag": "v1.11.0"
+    },
+    "json": {
+        "name": "json",
+        "url": "https://github.com/nlohmann/json.git",
+        "sha": "760304635dc74a5bf77903ad92446a6febb85acf",
+        "label": "tags/v3.10.5^2~8"
+    },
+    "protobuf": {
+        "name": "protobuf",
+        "url": "https://github.com/google/protobuf.git",
+        "sha": "6b5d8db01fe47478e8d400f550e797e6230d464e",
+        "tag": "v25.0",
+        "version": "25.0",
+    },
+    "zlib": {
+        "name": "zlib",
+        "url": "https://github.com/madler/zlib",
+        "sha": "04f42ceca40f73e2978b50e93806c2a18c1281fc",
+        "tag": "v1.2.13"
+    }
+}
