@@ -38,7 +38,6 @@ option(GIT_PROGRESS "Show Git progress" TRUE)
 option(ON_DEMAND    "Build targets on demand" FALSE)
 option(OVERRIDE_PKGS "Use own versions of subpackages" TRUE)
 option(PATCH        "Patch source after downloading" TRUE)
-option(RECENT_PKGS  "Use newer versions of packages" FALSE)
 option(USE_LDCONFIG "Use ldconfig when installing" FALSE)
 
 # Note: USE_SUDO should be DISABLED by default.
