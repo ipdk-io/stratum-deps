@@ -25,7 +25,7 @@ else()
     set(GRPC_VERSION    1.59.2)
   endif()
   set(PROTOBUF_GIT_TAG  6b5d8db01fe47478e8d400f550e797e6230d464e) # v25.0
-  set(ZLIB_GIT_TAG      04f42ceca40f73e2978b50e93806c2a18c1281fc) # v1.2.13
+  set(ZLIB_GIT_TAG      09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851) # v1.3
 endif()
 
 set(CCTZ_GIT_URL https://github.com/google/cctz.git)
