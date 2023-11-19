@@ -11,39 +11,115 @@ unset(_grpc_cxx_standard)
 unset(_package_providers)
 unset(_patch_clause)
 
-function(prepare_grpc_patch_step OUTVAR)
-  if(NOT DEFINED GRPC_VERSION OR GRPC_VERSION STREQUAL "")
-    message(WARNING "GRPC_VERSION undefined; cannot select patch file")
+#-----------------------------------------------------------------------
+# define_grpc_patch_file()
+# Returns the filename of the template patch file.
+#
+# Parameters:
+#   PATCHDIR - directory containing patch files.
+#   OUTVAR - name of output variable.
+#
+# Variables:
+#   GRPC_PATCH - name of gRPC patch file.
+#   GRPC_VERSION - version of gRPC being patched.
+#
+# Choices are, in descending order of precedence:
+#  1. ${GRPC_PATCHFILE}
+#  2. grpc-v$(GRPC_VERSION}.patch.in
+#  3. grpc-current.patch.in
+#
+# Returns an empty string if we cannot determine a valid patch file name.
+#-----------------------------------------------------------------------
+function(define_grpc_patch_file PATCHDIR OUTVAR)
+  # Specified patch file
+  if(DEFINED GRPC_PATCHFILE AND NOT GRPC_PATCHFILE STREQUAL "")
+    set(patchfile "${GRPC_PATCHFILE}")
+    if(EXISTS ${PATCHDIR}/${patchfile})
+      set(${OUTVAR} "${patchfile}" PARENT_SCOPE)
+    else()
+      message("----------------------------------------")
+      message("Patch file '${patchfile}' does not exist.")
+      message("Check definition of GRPC_PATCHFILE.")
+      message("Its current value is '${GRPC_PATCHFILE}.'")
+      message("----------------------------------------")
+      message(WARNING "Skipping patch stage")
+      set(${OUTVAR} "" PARENT_SCOPE)
+    endif()
     return()
   endif()
 
-  set(patchfile grpc-v${GRPC_VERSION}.patch.in)
-  set(patchdir ${CMAKE_SOURCE_DIR}/cmake/patches)
+  # Patch file for gRPC version
+  if(DEFINED GRPC_VERSION)
+    set(version_file "grpc-v${GRPC_VERSION}.patch.in")
+    if(EXISTS ${PATCHDIR}/${version_file})
+      set(${OUTVAR} "${version_file}" PARENT_SCOPE)
+      return()
+    endif()
+  endif()
 
-  if(NOT EXISTS ${patchdir}/${patchfile})
-    message(WARNING "Patch file for gRPC version ${GRPC_VERSION} not found")
+  # Current patch file
+  set(patchfile "grpc-current.patch.in")
+  if(EXISTS ${PATCHDIR}/${patchfile})
+    set(${OUTVAR} "${patchfile}" PARENT_SCOPE)
     return()
   endif()
 
-  # Patch the gRPC build script to set the RUNPATH of the installed
-  # Protobuf compiler plugins to the relative paths of the library
-  # directories.
+  # Patch file not found
+  if(DEFINED version_file)
+    message("----------------------------------------")
+    message("Patch file '${version_file}' does not exist.")
+    message("Check definition of GRPC_VERSION.")
+    message("Its current value is '${GRPC_VERSION}'.")
+    message("----------------------------------------")
+    message(WARNING "Skipping patch stage")
+  else()
+    message(STATUS "Skipping patch stage")
+  endif()
+  set(${OUTVAR} "" PARENT_SCOPE)
+endfunction(define_grpc_patch_file)
+
+#-----------------------------------------------------------------------
+# define_grpc_patch_clause()
+# Generates the patch file from the template and returns a PATCH
+# clause for the ExternalProject_Add() command. Returns an empty
+# string if patching is suppressed.
+#-----------------------------------------------------------------------
+function(define_grpc_patch_clause OUTVAR)
+  set(patch_dir ${CMAKE_SOURCE_DIR}/cmake/patches)
+
+  define_grpc_patch_file("${patch_dir}" patch_file)
+  if(patch_file STREQUAL "")
+    return()
+  endif()
+
+  message(STATUS "Generating grpc.patch from ${patch_file}")
+
+  set(configured_patch ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch)
+
+  # Substitution variable
   set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
+
   configure_file(
-    ${patchdir}/${patchfile}
-    ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch @ONLY
+    ${patch_dir}/${patch_file}
+    ${configured_patch}
+    @ONLY
   )
 
   set(patch_clause
     PATCH_COMMAND
-      patch -i ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch -p1 ${FORCE_OPTION}
+      patch -i ${configured_patch} -p1 ${FORCE_OPTION}
   )
+  set(${OUTVAR} "${patch_clause}" PARENT_SCOPE)
+endfunction(define_grpc_patch_clause)
 
-  set(${OUTVAR} ${patch_clause} PARENT_SCOPE)
-endfunction(prepare_grpc_patch_step)
-
+#-----------------------------------------------------------------------
+# Define build options
+#-----------------------------------------------------------------------
 if(PATCH)
-  prepare_grpc_patch_step(_patch_clause)
+  # Patch the gRPC build script to set the RUNPATH of the installed
+  # Protobuf compiler plugins to the relative paths of the library
+  # directories, and return a patch clause for ExternalProject_Add().
+  define_grpc_patch_clause(_patch_clause)
 endif()
 
 if(CMAKE_CROSSCOMPILING)
@@ -74,6 +150,9 @@ endif()
 
 GetDownloadClause(_download_clause ${GRPC_GIT_URL} ${GRPC_GIT_TAG})
 
+#-----------------------------------------------------------------------
+# Build gRPC
+#-----------------------------------------------------------------------
 ExternalProject_Add(grpc
   ${_download_clause}
   ${_patch_clause}
@@ -91,7 +170,7 @@ ExternalProject_Add(grpc
     ${_grpc_cxx_standard}
     -DBUILD_SHARED_LIBS=on
     ${_package_providers}
-    # gRPC builds BoringSSL, which is incompatible with libpython.
+    # gRPC normally builds BoringSSL, which is incompatible with libpython.
     # We use whatever version of OpenSSL is installed instead.
     -DgRPC_SSL_PROVIDER=package
     -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=off
