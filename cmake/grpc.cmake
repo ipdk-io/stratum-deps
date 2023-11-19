@@ -11,14 +11,18 @@ unset(_grpc_cxx_standard)
 unset(_package_providers)
 unset(_patch_clause)
 
-if(PATCH)
+function(prepare_grpc_patch_step OUTVAR)
   if(NOT DEFINED GRPC_VERSION OR GRPC_VERSION STREQUAL "")
-    message(FATAL_ERROR "GRPC_VERSION undefined; cannot select patch file")
+    message(WARNING "GRPC_VERSION undefined; cannot select patch file")
+    return()
   endif()
-  cmake_print_variables(GRPC_VERSION)
-  set(_patchfile grpc-v${GRPC_VERSION}.patch.in)
-  if(NOT EXISTS cmake/patches/${_patchfile})
-    message(FATAL_ERROR "Patch file for gRPC version ${GRPC_VERSION} not found")
+
+  set(patchfile grpc-v${GRPC_VERSION}.patch.in)
+  set(patchdir ${CMAKE_SOURCE_DIR}/cmake/patches)
+
+  if(NOT EXISTS ${patchdir}/${patchfile})
+    message(WARNING "Patch file for gRPC version ${GRPC_VERSION} not found")
+    return()
   endif()
 
   # Patch the gRPC build script to set the RUNPATH of the installed
@@ -26,14 +30,20 @@ if(PATCH)
   # directories.
   set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
   configure_file(
-    cmake/patches/${_patchfile}
+    ${patchdir}/${patchfile}
     ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch @ONLY
   )
 
-  set(_patch_clause
+  set(patch_clause
     PATCH_COMMAND
       patch -i ${CMAKE_CURRENT_BINARY_DIR}/grpc.patch -p1 ${FORCE_OPTION}
   )
+
+  set(${OUTVAR} ${patch_clause} PARENT_SCOPE)
+endfunction(prepare_grpc_patch_step)
+
+if(PATCH)
+  prepare_grpc_patch_step(_patch_clause)
 endif()
 
 if(CMAKE_CROSSCOMPILING)
