@@ -176,3 +176,21 @@ include(cmake/gflags.cmake)
 include(cmake/glog.cmake)
 include(cmake/gtest.cmake)
 include(cmake/json.cmake)
+
+#-----------------------------------------------------------------------
+# Post-install actions
+# - Set RPATH in gRPC plugins
+# - Create preconfig.cmake file
+#-----------------------------------------------------------------------
+
+ExternalProject_Add(postinstall
+  SOURCE_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/postinstall
+  CMAKE_ARGS
+    -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+    -DDEPS_SOURCE_DIR=${CMAKE_SOURCE_DIR}/source
+  INSTALL_COMMAND
+    ""
+  EXCLUDE_FROM_ALL
+    TRUE
+)
