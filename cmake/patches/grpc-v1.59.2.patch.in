@@ -1,7 +1,7 @@
 # Copyright 2023 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-# Updated to gRPC v1.59.1
+# Updated to gRPC v1.59.2
 
 # Patch the gRPC build script to set the RUNPATH of the installed
 # Protobuf compiler plugins to the relative paths of the library
