@@ -30,4 +30,5 @@ Stratum Dependencies Build Guide
    :maxdepth: 1
    :caption: Project
 
+   component-history
    Transition Guide <transition-guide>
