@@ -12,7 +12,10 @@ Intel&reg; IPU E2100, see
 
 ## Prerequisites
 
-It is assumed at the target-dependent's SDE (DPDK SDE or ES2K IPU SDE) dependencies have been installed on the system. The SDE's dependencies can be found in `sde/tools/setup/install_dep.py` file. Some of those dependencies also apply to this module. 
+It is assumed that the target-specific SDE (DPDK SDE or ES2K IPU SDE)
+dependencies have been installed on the system. The list of SDE's dependencies
+can be found in `sde/tools/setup/install_dep.py` file. Some of those
+dependencies also apply to this module, stratum-deps.
 
 Install the following dependencies for building stratum-deps.
 
