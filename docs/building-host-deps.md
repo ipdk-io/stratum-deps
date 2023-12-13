@@ -10,6 +10,24 @@ This document explains how to build and install the Stratum dependencies.
 Intel&reg; IPU E2100, see
 [Building ACC Target Dependencies](building-acc-target-deps.md).
 
+## Prerequisites
+
+It is assumed at the target-dependent's SDE (DPDK SDE or ES2K IPU SDE) dependencies have been installed on the system. The SDE's dependencies can be found in `sde/tools/setup/install_dep.py` file. Some of those dependencies also apply to this module. 
+
+Install the following dependencies for building stratum-deps.
+
+For Fedora:
+
+```bash
+dnf install -y openssl openssl-devel
+```
+
+For Ubuntu:
+
+```bash
+apt install -y openssl libssl-dev
+```
+
 ## Requirements
 
 Before you build the dependencies, you need to install:
