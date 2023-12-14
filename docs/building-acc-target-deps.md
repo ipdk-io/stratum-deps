@@ -25,11 +25,11 @@ The Host and Target libraries must be the same version.
 ## Prerequisites
 
 It is assumed that the target-specific SDE (DPDK SDE or ES2K IPU SDE)
-dependencies have been installed on the system. The list of SDE's dependencies
+dependencies have been installed on the system. The list of dependencies
 can be found in `sde/tools/setup/install_dep.py` file. Some of those
-dependencies also apply to this module, stratum-deps.
+dependencies also apply to stratum-deps.
 
-Install the following dependencies for building stratum-deps.
+Install the following packages for building stratum-deps.
 
 For Fedora:
 
