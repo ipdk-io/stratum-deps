@@ -5,7 +5,7 @@
 Component History
 =================
 
-Upgraded in v3.1.1
+Upgraded in v1.3.1
 ------------------
 
 .. list-table::
@@ -26,7 +26,7 @@ Upgraded in v3.1.1
 CVE is still present in zlib 1.3 as part of the MiniZip experimental code,
 but it is not used.
 
-Upgraded in v3.1.0
+Upgraded in v1.3.0
 ------------------
 
 .. list-table::
