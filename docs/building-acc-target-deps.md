@@ -24,9 +24,10 @@ The Host and Target libraries must be the same version.
 
 ## Prerequisites
 
-It is assumed that the target-specific SDE (DPDK SDE or ES2K IPU SDE)
-dependencies have been installed on the system. The list of dependencies
-can be found in `sde/tools/setup/install_dep.py` file. Some of those
+It is assumed that the dependencies for the target-specific SDE (DPDK, ES2K, or
+Tofino) have been installed on the system. For DPDK and ES2K, the list of
+dependencies can be found in the `sde/tools/setup/install_py` file.
+For Tofino, use the `p4studio dependencies list` command. Some of these
 dependencies also apply to stratum-deps.
 
 Install the following packages for building stratum-deps.
