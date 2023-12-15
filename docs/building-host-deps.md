@@ -10,6 +10,28 @@ This document explains how to build and install the Stratum dependencies.
 Intel&reg; IPU E2100, see
 [Building ACC Target Dependencies](building-acc-target-deps.md).
 
+## Prerequisites
+
+It is assumed that the dependencies for the target-specific SDE (DPDK, ES2K, or
+Tofino) have been installed on the system. For DPDK and ES2K, the list of
+dependencies can be found in the `sde/tools/setup/install_py` file.
+For Tofino, use the `p4studio dependencies list` command. Some of these
+dependencies also apply to stratum-deps.
+
+Install the following packages for building stratum-deps.
+
+For Fedora:
+
+```bash
+dnf install -y openssl openssl-devel
+```
+
+For Ubuntu:
+
+```bash
+apt install -y openssl libssl-dev
+```
+
 ## Requirements
 
 Before you build the dependencies, you need to install:
