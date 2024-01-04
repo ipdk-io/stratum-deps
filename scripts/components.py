@@ -71,6 +71,7 @@ def write_cmake_package(pkg, name, out):
     write_cmake_url(name, pkg, out)
     write_cmake_tag(name, pkg, out)
     write_cmake_version(name, pkg, out)
+    write_cmake_patchfile(name, pkg, out)
     write_cmake_defines(name, pkg, out)
     return
 
@@ -106,6 +107,12 @@ def write_cmake_version(name, pkg, out):
     version = optional(pkg, 'version')
     if version is not None:
         out.write('set({}_VERSION "{}")\n'.format(name, version))
+    return
+
+def write_cmake_patchfile(name, pkg, out):
+    version = optional(pkg, 'patchfile')
+    if version is not None:
+        out.write('set({}_PATCHFILE "{}")\n'.format(name, version))
     return
 
 def write_cmake_defines(name, pkg, out):
