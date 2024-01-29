@@ -13,25 +13,24 @@ unset(_patch_clause)
 
 #-----------------------------------------------------------------------
 # define_grpc_patch_file()
-# Returns the filename of the template patch file.
+# Returns the name of the gRPC patch file, or an empty string if
+# we cannot determine a valid file name.
 #
 # Parameters:
 #   PATCHDIR - directory containing patch files.
 #   OUTVAR - name of output variable.
 #
 # Variables:
-#   GRPC_PATCH - name of gRPC patch file.
+#   GRPC_PATCHFILE - name of gRPC patch file.
 #   GRPC_VERSION - version of gRPC being patched.
 #
 # Choices are, in descending order of precedence:
 #  1. ${GRPC_PATCHFILE}
-#  2. grpc-v$(GRPC_VERSION}.patch.in
+#  2. grpc-v${GRPC_VERSION}.patch.in
 #  3. grpc-current.patch.in
-#
-# Returns an empty string if we cannot determine a valid patch file name.
-#-----------------------------------------------------------------------
+##-----------------------------------------------------------------------
 function(define_grpc_patch_file PATCHDIR OUTVAR)
-  # Specified patch file
+  # Patch file name from components.json file
   if(DEFINED GRPC_PATCHFILE AND NOT GRPC_PATCHFILE STREQUAL "")
     set(patchfile "${GRPC_PATCHFILE}")
     if(EXISTS ${PATCHDIR}/${patchfile})
@@ -48,7 +47,7 @@ function(define_grpc_patch_file PATCHDIR OUTVAR)
     return()
   endif()
 
-  # Patch file for gRPC version
+  # Patch file name from gRPC version
   if(DEFINED GRPC_VERSION)
     set(version_file "grpc-v${GRPC_VERSION}.patch.in")
     if(EXISTS ${PATCHDIR}/${version_file})
@@ -57,7 +56,7 @@ function(define_grpc_patch_file PATCHDIR OUTVAR)
     endif()
   endif()
 
-  # Current patch file
+  # Current patch file (nominally a symlink)
   set(patchfile "grpc-current.patch.in")
   if(EXISTS ${PATCHDIR}/${patchfile})
     set(${OUTVAR} "${patchfile}" PARENT_SCOPE)
@@ -80,15 +79,15 @@ endfunction(define_grpc_patch_file)
 
 #-----------------------------------------------------------------------
 # define_grpc_patch_clause()
-# Generates the patch file from the template and returns a PATCH
-# clause for the ExternalProject_Add() command. Returns an empty
-# string if patching is suppressed.
+# Generates a PATCH clause for the ExternalProject_Add() command.
+# Returns an empty string if patching is suppressed.
 #-----------------------------------------------------------------------
 function(define_grpc_patch_clause OUTVAR)
   set(patch_dir ${CMAKE_SOURCE_DIR}/cmake/patches)
 
   define_grpc_patch_file("${patch_dir}" patch_file)
   if(patch_file STREQUAL "")
+    set(${OUTVAR} "" PARENT_SCOPE)
     return()
   endif()
 
@@ -100,8 +99,8 @@ function(define_grpc_patch_clause OUTVAR)
   set(GRPC_INSTALL_RPATH $ORIGIN/../lib64:$ORIGIN/../lib)
 
   configure_file(
-    ${patch_dir}/${patch_file}
-    ${configured_patch}
+    "${patch_dir}/${patch_file}"
+    "${configured_patch}"
     @ONLY
   )
 
