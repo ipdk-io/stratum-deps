@@ -18,8 +18,6 @@ directory, which has been phased out.
 
 See the [Releases](https://github.com/ipdk-io/stratum-deps/releases) page
 for a list of releases, with their release notes and artifacts.
-The most recent release is
-[version 1.3.1](https://github.com/ipdk-io/stratum-deps/releases/tag/v1.3.1).
 
 See the [Transition Guide](/docs/transition-guide.md) for more information.
 
