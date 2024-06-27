@@ -12,12 +12,12 @@ required by Stratum.
 
 ## Project status
 
-The `stratum-deps` repository formally replaces the
+The `stratum-deps` repository replaces the
 [networking-recipe/setup](https://github.com/ipdk-io/networking-recipe/tree/main/setup)
-directory, which is being phased out.
+directory, which has been phased out.
 
-You can start using `stratum-deps` now. The most recent release is
-[version 1.2.1](https://github.com/ipdk-io/stratum-deps/releases/tag/v1.2.1).
+See the [Releases](https://github.com/ipdk-io/stratum-deps/releases) page
+for a list of releases, with their release notes and artifacts.
 
 See the [Transition Guide](/docs/transition-guide.md) for more information.
 
@@ -31,8 +31,3 @@ See the [Transition Guide](/docs/transition-guide.md) for more information.
 
 - [make-cross-deps.sh](/docs/make-cross-deps.rst)
 - [make-host-deps.sh](/docs/make-host-deps.rst)
-
-## Versions
-
-- See the [Releases](https://github.com/ipdk-io/stratum-deps/releases) page
-  for release notes and artifacts.
