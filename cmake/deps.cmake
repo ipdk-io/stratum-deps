@@ -36,5 +36,8 @@ set(PROTOBUF_GIT_TAG "6b5d8db01fe47478e8d400f550e797e6230d464e") # v25.0
 set(PROTOBUF_VERSION "25.0")
 set(PROTOBUF_ABSL_PROVIDER "package")
 
+set(RE2_GIT_URL "https://github.com/google/re2.git")
+set(RE2_GIT_TAG "0c5616df9c0aaa44c9440d87422012423d91c7d1") # 2022-04-01
+
 set(ZLIB_GIT_URL "https://github.com/madler/zlib")
 set(ZLIB_GIT_TAG "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851") # v1.3
