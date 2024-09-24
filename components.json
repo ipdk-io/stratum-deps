@@ -58,6 +58,12 @@
             "ABSL_PROVIDER": "package"
         }
     },
+    "re2": {
+        "name": "re2",
+        "url": "https://github.com/google/re2.git",
+        "sha": "0c5616df9c0aaa44c9440d87422012423d91c7d1",
+        "tag": "2022-04-01"
+    },
     "zlib": {
         "name": "zlib",
         "url": "https://github.com/madler/zlib",

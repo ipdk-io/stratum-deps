@@ -61,6 +61,7 @@ if(OVERRIDE_PKGS)
     -DgRPC_ABSL_PROVIDER=package
     -DgRPC_CARES_PROVIDER=package
     -DgRPC_PROTOBUF_PROVIDER=package
+    -DgRPC_RE2_PROVIDER=package
     -DgRPC_ZLIB_PROVIDER=package
   )
   set(_depends_clause
@@ -68,6 +69,7 @@ if(OVERRIDE_PKGS)
       abseil-cpp
       cares
       protobuf
+      re2
       zlib
   )
 endif()
