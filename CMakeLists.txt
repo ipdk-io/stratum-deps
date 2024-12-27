@@ -7,7 +7,7 @@
 # Version 3.15 is the baseline for P4 Control Plane.
 cmake_minimum_required(VERSION 3.15)
 
-project(stratum-deps VERSION 1.4.0 LANGUAGES C CXX)
+project(stratum-deps VERSION 1.3.4 LANGUAGES C CXX)
 
 include(ExternalProject)
 include(CMakePrintHelpers)
