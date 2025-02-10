@@ -23,8 +23,23 @@ Upgraded in v1.3.5
      - `CVE-2024-25629 <https://nvd.nist.gov/vuln/detail/CVE-2024-25629>`_
      - `86 <https://github.com/ipdk-io/stratum-deps/pull/86>`_
 
-Changes in v1.3.4
-------------------
+Changes and Upgrades in v1.3.4
+------------------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - From
+     - To
+     - Issues addressed
+     - PR
+
+   * - re2
+     - 2022-04-01
+     - 2022-12-01
+     - Updated to release that installs a pkg-config file
+     - `74 <https://github.com/ipdk-io/stratum-deps/pull/74>`_
 
 .. list-table::
    :header-rows: 1

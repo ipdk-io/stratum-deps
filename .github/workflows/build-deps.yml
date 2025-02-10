@@ -4,8 +4,12 @@ on:
   # Triggers the workflow on push or pull request events
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'docs/**'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - 'docs/**'
 
   # Allows the workflow to be run from the Actions tab
   workflow_dispatch:
