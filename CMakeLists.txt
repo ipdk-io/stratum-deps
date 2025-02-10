@@ -169,23 +169,33 @@ if(OVERRIDE_PKGS)
   include(cmake/re2.cmake)
 endif()
 
-# Ensure RE2 is found and made available
-set(RE2_ROOT ${CMAKE_INSTALL_PREFIX})
-set(CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX} ${CMAKE_PREFIX_PATH})
-
 include(cmake/grpc.cmake)
-
 include(cmake/cctz.cmake)
 include(cmake/gflags.cmake)
 include(cmake/glog.cmake)
 include(cmake/gtest.cmake)
 include(cmake/json.cmake)
 
-
+#-----------------------------------------------------------------------
 # Find required packages
+#-----------------------------------------------------------------------
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
-find_package(re2 CONFIG REQUIRED)
+
+# find_package(re2) does not work on apt install in Ubuntu
+# (used in github workflow)
+
+find_path(RE2_INCLUDE_DIR re2/re2.h)
+find_library(RE2_LIBRARY re2)
+
+if(RE2_INCLUDE_DIR AND RE2_LIBRARY)
+  set_target_properties(re2::re2 PROPERTIES
+    IMPORTED_LOCATION "${RE2_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${RE2_INCLUDE_DIR}"
+  )
+else()
+  message(FATAL_ERROR "RE2 library not found")
+endif()
 
 # Print configuration summary
 include(FeatureSummary)

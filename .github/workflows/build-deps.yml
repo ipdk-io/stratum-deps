@@ -24,6 +24,7 @@ env:
   DEPS_SRC_TARBALL: deps-source.tar.gz
   DEPS_BIN_ARTIFACT: deps-binary
   DEPS_BIN_TARBALL: deps-ubuntu-22.04-x86_64.tar.gz
+  CMAKE_PREFIX_PATH: /usr/lib/x86_64-linux-gnu
 
 jobs:
   build_stratum_deps:
@@ -46,7 +47,7 @@ jobs:
         run: |
           sudo mkdir -pv --mode=go+w $DEPS_INSTALL_DIR
           cmake --version
-          cmake -B build -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_DIR -DGIT_PROGRESS=OFF
+          cmake -B build -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_DIR -DGIT_PROGRESS=OFF -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH
           cmake --build build -j8
 
       - name: Prune folder
