@@ -1,9 +1,42 @@
-.. Copyright 2023 Intel Corporation
+.. Copyright 2023-2025 Intel Corporation
    SPDX-License-Identifier: Apache 2.0
 
 =================
 Component History
 =================
+
+Upgraded in v1.3.5
+------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - From
+     - To
+     - CVEs Addressed
+     - PR
+
+   * - c-ares
+     - 1.19.1
+     - 1.34.4
+     - `CVE-2024-25629 <https://nvd.nist.gov/vuln/detail/CVE-2024-25629>`_
+     - `86 <https://github.com/ipdk-io/stratum-deps/pull/86>`_
+
+Changes in v1.3.4
+------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - Change
+     - PR
+
+   * - re2
+     - Made RE2 is discrete component
+     - `73 <https://github.com/ipdk-io/stratum-deps/pull/73>`_
+
 
 Upgraded in v1.3.1
 ------------------
