@@ -8,9 +8,9 @@
     "cares": {
         "name": "c-ares",
         "url": "https://github.com/c-ares/c-ares.git",
-        "sha": "6360e96b5cf8e5980c887ce58ef727e53d77243a",
-        "tag": "v1.19.1",
-        "label": "cares-1_19_1"
+        "sha": "b82840329a4081a1f1b125e6e6b760d4e1237b52",
+        "tag": "v1.34.4",
+        "label": "cares-1_34_4"
     },
     "cctz": {
         "name": "cctz",
