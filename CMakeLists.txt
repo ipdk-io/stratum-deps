@@ -1,13 +1,13 @@
 # Downloads and builds dependencies
 #
-# Copyright 2022-2023 Intel Corporation
+# Copyright 2022-2025 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 #
 
 # Version 3.15 is the baseline for P4 Control Plane.
 cmake_minimum_required(VERSION 3.15)
 
-project(stratum-deps VERSION 1.3.4 LANGUAGES C CXX)
+project(stratum-deps VERSION 1.3.5 LANGUAGES C CXX)
 
 include(ExternalProject)
 include(CMakePrintHelpers)
@@ -169,6 +169,10 @@ if(OVERRIDE_PKGS)
   include(cmake/re2.cmake)
 endif()
 
+# Ensure RE2 is found and made available
+set(RE2_ROOT ${CMAKE_INSTALL_PREFIX})
+set(CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX} ${CMAKE_PREFIX_PATH})
+
 include(cmake/grpc.cmake)
 
 include(cmake/cctz.cmake)
@@ -176,3 +180,13 @@ include(cmake/gflags.cmake)
 include(cmake/glog.cmake)
 include(cmake/gtest.cmake)
 include(cmake/json.cmake)
+
+
+# Find required packages
+find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(re2 CONFIG REQUIRED)
+
+# Print configuration summary
+include(FeatureSummary)
+feature_summary(WHAT ALL)
