@@ -2,8 +2,8 @@
     "abseil": {
         "name": "abseil-cpp",
         "url": "https://github.com/abseil/abseil-cpp.git",
-        "sha": "29bf8085f3bf17b84d30e34b3d7ff8248fda404e",
-        "tag": "20230802.0"
+        "sha": "4447c7562e3bc702ade25105912dce503f0c4010",
+        "tag": "20240722.0"
     },
     "cares": {
         "name": "c-ares",
@@ -34,9 +34,9 @@
     "grpc": {
         "name": "grpc",
         "url": "https://github.com/google/grpc.git",
-        "sha": "883e5f76976b86afee87415dc67bde58d9b295a4",
-        "tag": "v1.59.2",
-        "version": "1.59.2"
+        "sha": "b4ef7c141d960be62e0008601261bb22cecb5d40",
+        "tag": "v1.68.0",
+        "version": "1.68.0"
     },
     "gtest": {
         "name": "gtest",
@@ -54,10 +54,10 @@
     "protobuf": {
         "name": "protobuf",
         "url": "https://github.com/google/protobuf.git",
-        "sha": "6b5d8db01fe47478e8d400f550e797e6230d464e",
-        "tag": "v25.0",
-        "version": "25.0",
-        "label": "v3.25.0",
+        "sha": "10ef3f77683f77fb3c059bf47725c27b3ff41e63",
+        "tag": "v28.1",
+        "version": "28.1",
+        "label": "v28.1",
         "defines": {
             "ABSL_PROVIDER": "package"
         }
