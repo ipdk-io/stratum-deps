@@ -5,6 +5,37 @@
 Component History
 =================
 
+Upgraded in v1.4.0
+------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - From
+     - To
+     - CVEs Addressed
+     - PR
+
+   * - abseil-cpp
+     - 20230802.0
+     - 20240722.0
+     -
+     - `91 <https://github.com/ipdk-io/stratum-deps/pull/91>`_
+
+   * - grpc
+     - 1.59.2
+     - 1.69.0
+     - 
+     - `91 <https://github.com/ipdk-io/stratum-deps/pull/91>`_
+
+   * - protobuf
+     - 25.0
+     - 29.0
+     - `CVE-2024-7254 <https://nvd.nist.gov/vuln/detail/cve-2024-7254>`_
+     - `91 <https://github.com/ipdk-io/stratum-deps/pull/91>`_
+
+
 Upgraded in v1.3.5
 ------------------
 

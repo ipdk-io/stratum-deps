@@ -7,10 +7,10 @@
 #
 
 set(ABSEIL_GIT_URL "https://github.com/abseil/abseil-cpp.git")
-set(ABSEIL_GIT_TAG "29bf8085f3bf17b84d30e34b3d7ff8248fda404e") # 20230802.0
+set(ABSEIL_GIT_TAG "4447c7562e3bc702ade25105912dce503f0c4010") # 20240722.0
 
 set(CARES_GIT_URL "https://github.com/c-ares/c-ares.git")
-set(CARES_GIT_TAG "b82840329a4081a1f1b125e6e6b760d4e1237b52") # cares-1.34.4
+set(CARES_GIT_TAG "b82840329a4081a1f1b125e6e6b760d4e1237b52") # cares-1_34_4
 
 set(CCTZ_GIT_URL "https://github.com/google/cctz.git")
 set(CCTZ_GIT_TAG "02918d62329ef440935862719829d061a5f4beba") # v2.3-78-g02918d6
@@ -22,8 +22,8 @@ set(GLOG_GIT_URL "https://github.com/google/glog.git")
 set(GLOG_GIT_TAG "a8e0007e96ff96145022c488e367da10f835c75d") # v0.6.0-rc1
 
 set(GRPC_GIT_URL "https://github.com/google/grpc.git")
-set(GRPC_GIT_TAG "883e5f76976b86afee87415dc67bde58d9b295a4") # v1.59.2
-set(GRPC_VERSION "1.59.2")
+set(GRPC_GIT_TAG "b4ef7c141d960be62e0008601261bb22cecb5d40") # v1.69.0
+set(GRPC_VERSION "1.69.0")
 
 set(GTEST_GIT_URL "https://github.com/google/googletest.git")
 set(GTEST_GIT_TAG "e2239ee6043f73722e7aa812a459f54a28552929") # release-1.11.0
@@ -32,8 +32,8 @@ set(JSON_GIT_URL "https://github.com/nlohmann/json.git")
 set(JSON_GIT_TAG "760304635dc74a5bf77903ad92446a6febb85acf") # v3.10.1-30-g76030463
 
 set(PROTOBUF_GIT_URL "https://github.com/google/protobuf.git")
-set(PROTOBUF_GIT_TAG "6b5d8db01fe47478e8d400f550e797e6230d464e") # v25.0
-set(PROTOBUF_VERSION "25.0")
+set(PROTOBUF_GIT_TAG "2d4414f384dc499af113b5991ce3eaa9df6dd931") # v29.0
+set(PROTOBUF_VERSION "29.0")
 set(PROTOBUF_ABSL_PROVIDER "package")
 
 set(RE2_GIT_URL "https://github.com/google/re2.git")
