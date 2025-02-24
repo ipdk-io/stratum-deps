@@ -22,8 +22,8 @@ set(GLOG_GIT_URL "https://github.com/google/glog.git")
 set(GLOG_GIT_TAG "a8e0007e96ff96145022c488e367da10f835c75d") # v0.6.0-rc1
 
 set(GRPC_GIT_URL "https://github.com/google/grpc.git")
-set(GRPC_GIT_TAG "b4ef7c141d960be62e0008601261bb22cecb5d40") # v1.68.0
-set(GRPC_VERSION "1.68.0")
+set(GRPC_GIT_TAG "b4ef7c141d960be62e0008601261bb22cecb5d40") # v1.69.0
+set(GRPC_VERSION "1.69.0")
 
 set(GTEST_GIT_URL "https://github.com/google/googletest.git")
 set(GTEST_GIT_TAG "e2239ee6043f73722e7aa812a459f54a28552929") # release-1.11.0
@@ -32,8 +32,8 @@ set(JSON_GIT_URL "https://github.com/nlohmann/json.git")
 set(JSON_GIT_TAG "760304635dc74a5bf77903ad92446a6febb85acf") # v3.10.1-30-g76030463
 
 set(PROTOBUF_GIT_URL "https://github.com/google/protobuf.git")
-set(PROTOBUF_GIT_TAG "10ef3f77683f77fb3c059bf47725c27b3ff41e63") # v28.1
-set(PROTOBUF_VERSION "28.1")
+set(PROTOBUF_GIT_TAG "2d4414f384dc499af113b5991ce3eaa9df6dd931") # v29.0
+set(PROTOBUF_VERSION "29.0")
 set(PROTOBUF_ABSL_PROVIDER "package")
 
 set(RE2_GIT_URL "https://github.com/google/re2.git")
