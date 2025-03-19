@@ -35,6 +35,11 @@ Upgraded in v1.4.0
      - `CVE-2024-7254 <https://nvd.nist.gov/vuln/detail/cve-2024-7254>`_
      - `91 <https://github.com/ipdk-io/stratum-deps/pull/91>`_
 
+   * - zlib
+     - 1.3
+     - 1.3.1
+     - `CVE-2023-45853 <https://nvd.nist.gov/vuln/detail/CVE-2023-45853>`_
+     - `94 <https://github.com/ipdk-io/stratum-deps/pull/94>`_
 
 Upgraded in v1.3.5
 ------------------
