@@ -7,7 +7,7 @@ find_package(Cython REQUIRED)
 include(UseCython)
 
 # Get version from main project or set it explicitly
-set(PYTHON_MODULE_VERSION "${CMAKE_PROJECT_VERSION}")
+set(PYTHON_MODULE_VERSION 1.4.0)
 
 # Define the Cython module
 set(CYTHON_MODULE_NAME "stratum_python")
