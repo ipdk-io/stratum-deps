@@ -40,4 +40,4 @@ set(RE2_GIT_URL "https://github.com/google/re2.git")
 set(RE2_GIT_TAG "4be240789d5b322df9f02b7e19c8651f3ccbf205") # 2022-12-01
 
 set(ZLIB_GIT_URL "https://github.com/madler/zlib")
-set(ZLIB_GIT_TAG "09155eaa2f9270dc4ed1fa13e2b4b2613e6e4851") # v1.3
+set(ZLIB_GIT_TAG "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf") # v1.3.1
