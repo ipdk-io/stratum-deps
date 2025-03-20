@@ -1,0 +1,14 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="stratum-python",
+    version="@PYTHON_MODULE_VERSION@",
+    description="Python bindings for stratum-deps",
+    author="Your Name",
+    author_email="your.email@example.com",
+    packages=find_packages(),
+    package_data={
+        "stratum_python": ["*.so", "*.pyd"],
+    },
+    python_requires=">=3.8",
+)

@@ -39,6 +39,7 @@ option(ON_DEMAND    "Build targets on demand" FALSE)
 option(OVERRIDE_PKGS "Use own versions of subpackages" TRUE)
 option(PATCH        "Patch source after downloading" TRUE)
 option(USE_LDCONFIG "Use ldconfig when installing" FALSE)
+option(BUILD_PYTHON_BINDINGS "Build Python bindings" ON)
 
 # Note: USE_SUDO should be DISABLED by default.
 # This is in keeping with the following security principles:
@@ -77,6 +78,9 @@ if(CMAKE_CROSSCOMPILING)
 else()
   list(APPEND CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX})
 endif()
+
+# Set CMAKE_MODULE_PATH to include the directory
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 #-----------------------------------------------------------------------
 # CMAKE_BUILD_TYPE
@@ -185,3 +189,16 @@ find_package(OpenSSL REQUIRED)
 # Print configuration summary
 include(FeatureSummary)
 feature_summary(WHAT ALL)
+
+#-----------------------------------------------------------------------
+# Python bindings
+#-----------------------------------------------------------------------
+
+# Choose ONE approach: either ExternalProject_Add or add_subdirectory
+if(BUILD_PYTHON_BINDINGS)
+    # Use ExternalProject_Add approach
+    include(cmake/python-bindings.cmake)
+    
+    # OR use add_subdirectory approach (not both)
+    # add_subdirectory(python)
+endif()
