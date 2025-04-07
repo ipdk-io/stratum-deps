@@ -3,7 +3,7 @@ name: Build stratum dependencies
 on:
   # Triggers the workflow on push or pull request events
   push:
-    branches: [ "main" ]
+    branches: [ "main", "workflow_add_arm_build_check" ]
     paths-ignore:
       - 'docs/**'
   pull_request:
@@ -23,16 +23,34 @@ env:
   #---------------------------------------------------------------------
   # Environment variables
   #---------------------------------------------------------------------
-  DEPS_INSTALL_DIR: /opt/p4dev/x86deps
-  DEPS_SRC_ARTIFACT: deps-source
-  DEPS_SRC_TARBALL: deps-source.tar.gz
-  DEPS_BIN_ARTIFACT: deps-binary
-  DEPS_BIN_TARBALL: deps-ubuntu-22.04-x86_64.tar.gz
-  CMAKE_PREFIX_PATH: /usr/lib/x86_64-linux-gnu
+    DEPS_INSTALL_DIR_X86: /opt/p4dev/x86deps
+    DEPS_INSTALL_DIR_ARM: /opt/p4dev/arm64deps
+    DEPS_SRC_ARTIFACT: deps-source
+    DEPS_SRC_TARBALL: deps-source.tar.gz
+    DEPS_BIN_ARTIFACT: deps-binary
+    DEPS_BIN_TARBALL_X86: deps-ubuntu-22.04-x86_64.tar.gz
+    DEPS_BIN_TARBALL_ARM: deps-ubuntu-22.04-arm64.tar.gz
+    CMAKE_PREFIX_PATH_X86: /usr/lib/x86_64-linux-gnu
+    CMAKE_PREFIX_PATH_ARM: /usr/lib/aarch64-linux-gnu
 
 jobs:
   build_stratum_deps:
-    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        architecture: [x86_64, arm64]
+        include:
+          - architecture: x86_64
+            runs-on: ubuntu-22.04
+            deps_install_dir: ${{ env.DEPS_INSTALL_DIR_X86 }}
+            deps_bin_tarball: ${{ env.DEPS_BIN_TARBALL_X86 }}
+            cmake_prefix_path: ${{ env.CMAKE_PREFIX_PATH_X86 }}
+          - architecture: arm64
+            runs-on: ubuntu-22.04-arm
+            deps_install_dir: ${{ env.DEPS_INSTALL_DIR_ARM }}
+            deps_bin_tarball: ${{ env.DEPS_BIN_TARBALL_ARM }}
+            cmake_prefix_path: ${{ env.CMAKE_PREFIX_PATH_ARM }}
+
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
       # Check out repository under $GITHUB_WORKSPACE
