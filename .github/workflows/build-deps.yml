@@ -37,7 +37,7 @@ jobs:
     steps:
       # Check out repository under $GITHUB_WORKSPACE
       - name: Check out stratum-deps
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           path: stratum-deps
 
